@@ -11,10 +11,11 @@ import Icon from "./Icon";
 import { Box } from "./Themed";
 
 interface SearchBarProps extends RNTextInputProps {
-  placeholderText: string;
+  placeholder?: string;
+  value: string;
 }
 
-const SearchBar = ({ placeholderText }: SearchBarProps) => {
+const SearchBar = ({ placeholder, value, ...rest }: SearchBarProps) => {
   const theme = useReTheme();
   return (
     <Box
@@ -36,8 +37,11 @@ const SearchBar = ({ placeholderText }: SearchBarProps) => {
       <Box flex={1}>
         <TextInput
           style={styles.text}
-          placeholder={placeholderText}
+          placeholder={placeholder || ""}
           placeholderTextColor={theme.colors.placeholder}
+          returnKeyType="search"
+          value={value}
+          {...rest}
         />
       </Box>
     </Box>
