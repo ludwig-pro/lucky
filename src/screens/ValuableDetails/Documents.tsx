@@ -1,6 +1,11 @@
 import * as React from "react";
-import { StyleSheet, Image, ImageSourcePropType } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import {
+  StyleSheet,
+  Image,
+  ImageSourcePropType,
+  ScrollView,
+} from "react-native";
+import { BorderlessButton } from "react-native-gesture-handler";
 
 import { Box, Text } from "../../components";
 import { useReTheme } from "../../theme";
@@ -14,9 +19,10 @@ type Document = {
 interface DocumentsProps {
   title: string;
   documents: Document[];
+  onPress: (id: number) => void;
 }
 
-const Documents = ({ title, documents }: DocumentsProps) => {
+const Documents = ({ title, documents, onPress }: DocumentsProps) => {
   const theme = useReTheme();
   return (
     <Box paddingVertical="ml">
@@ -26,24 +32,25 @@ const Documents = ({ title, documents }: DocumentsProps) => {
         contentContainerStyle={{ paddingTop: theme.spacing.sm }}
       >
         {documents.map(({ id, source }) => (
-          <Box
-            key={id}
-            height={128}
-            width={128}
-            marginRight="sm"
-            backgroundColor="placeholder"
-            borderRadius="ml"
-            overflow="hidden"
-          >
-            <Image
-              source={source}
-              style={{
-                ...StyleSheet.absoluteFillObject,
-                width: undefined,
-                height: undefined,
-              }}
-            />
-          </Box>
+          <BorderlessButton key={id} onPress={() => onPress(id)}>
+            <Box
+              height={128}
+              width={128}
+              marginRight="sm"
+              backgroundColor="placeholder"
+              borderRadius="ml"
+              overflow="hidden"
+            >
+              <Image
+                source={source}
+                style={{
+                  ...StyleSheet.absoluteFillObject,
+                  width: undefined,
+                  height: undefined,
+                }}
+              />
+            </Box>
+          </BorderlessButton>
         ))}
       </ScrollView>
     </Box>

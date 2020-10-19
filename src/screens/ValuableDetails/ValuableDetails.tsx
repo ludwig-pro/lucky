@@ -2,9 +2,8 @@ import { Feather } from "@expo/vector-icons";
 import * as React from "react";
 import { StyleSheet, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Box, Text, IconButton } from "../../components";
+import { Box, Text, ModalContainer } from "../../components";
 import { InventoryRoutes, StackNavigationProps } from "../../navigation/types";
 import { useReTheme } from "../../theme";
 
@@ -33,13 +32,15 @@ const CARTIER_RING = {
 };
 
 const ValuableDetails = ({
-  navigation,
+  navigation: { goBack, navigate },
 }: StackNavigationProps<InventoryRoutes, "ValuableDetails">) => {
-  const insets = useSafeAreaInsets();
   const theme = useReTheme();
 
+  const navigateToDocument = (id: number) =>
+    navigate("Document", { documentId: id });
+
   return (
-    <Box>
+    <ModalContainer goBack={goBack}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box height={375} width={375} backgroundColor="primary">
           <Image
@@ -71,23 +72,14 @@ const ValuableDetails = ({
             title="Price"
             sectionData={Object.entries(CARTIER_RING.price)}
           />
-          <Documents title="Documents" documents={CARTIER_RING.documents} />
+          <Documents
+            title="Documents"
+            documents={CARTIER_RING.documents}
+            onPress={navigateToDocument}
+          />
         </Box>
       </ScrollView>
-      <Box
-        position="absolute"
-        paddingLeft="ml"
-        style={{ paddingTop: insets.top }}
-      >
-        <IconButton
-          name="ios-close"
-          size={32}
-          color="white"
-          backgroundColor="tabIconDefault"
-          onPress={() => navigation.goBack()}
-        />
-      </Box>
-    </Box>
+    </ModalContainer>
   );
 };
 

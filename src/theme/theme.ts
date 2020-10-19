@@ -20,6 +20,7 @@ export const theme = {
     tabIconDefault: palette.blueyGrey,
     tabIconSelected: palette.blue,
     white: palette.white,
+    dark: palette.black,
     placeholder: palette.blueyGrey,
     iosBackground: palette.paleGrey,
     border: palette.blueyGrey,

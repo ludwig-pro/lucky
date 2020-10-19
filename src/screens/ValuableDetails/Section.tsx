@@ -26,7 +26,7 @@ const Section = ({ title, sectionData }: SectionProps) => (
   <Box paddingVertical="ml" borderBottomColor="separator" borderBottomWidth={1}>
     <Text variant="title2">{title}</Text>
     {sectionData.map(([key, value]) => (
-      <Row>
+      <Row key={key}>
         <Text variant="title3">{key}</Text>
         <Text variant="body">{value}</Text>
       </Row>

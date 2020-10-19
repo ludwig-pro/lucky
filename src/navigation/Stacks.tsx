@@ -3,7 +3,13 @@ import * as React from "react";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 
 import Insurance from "../screens/Insurance";
-import { ValuableDetails, Inventory, Protection, Profile } from "../screens";
+import {
+  ValuableDetails,
+  Inventory,
+  Protection,
+  Profile,
+  Document,
+} from "../screens";
 import { useReTheme } from "../theme";
 
 import {
@@ -79,6 +85,15 @@ export const InventoryNavigator = () => {
         component={ValuableDetails}
         options={{
           headerShown: false,
+          stackPresentation: "fullScreenModal",
+        }}
+      />
+      <InventoryStack.Screen
+        name="Document"
+        component={Document}
+        options={{
+          headerShown: false,
+          stackPresentation: "fullScreenModal",
         }}
       />
     </InventoryStack.Navigator>

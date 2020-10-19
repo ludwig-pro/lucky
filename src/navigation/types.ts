@@ -26,6 +26,7 @@ export type InsuranceParamList = {
 export type InventoryParamList = {
   Inventory: undefined;
   ValuableDetails: undefined;
+  Document: undefined;
 };
 
 export type ProfileParamList = {
@@ -54,4 +55,5 @@ export interface StackNavigationProps<
 export type InventoryRoutes = {
   Inventory: undefined;
   ValuableDetails: { valuableId: ValuableProduct["id"] };
+  Document: { documentId: number };
 };
