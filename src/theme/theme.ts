@@ -1,4 +1,4 @@
-import { createText, createBox, useTheme } from "@shopify/restyle";
+import { useTheme } from "@shopify/restyle";
 
 import { NamedStyles } from "./types";
 
@@ -7,6 +7,8 @@ const palette = {
   blueyGrey: "#9399ac",
   blue: "#0042da",
   paleGrey: "#f6f7fc",
+  white: "#FFFFFF",
+  primary: "#0042da",
 };
 
 export const theme = {
@@ -16,11 +18,16 @@ export const theme = {
     label: palette.blueyGrey,
     tabIconDefault: palette.blueyGrey,
     tabIconSelected: palette.blue,
+    white: palette.white,
+    placeholder: palette.blueyGrey,
+    iosBackground: palette.paleGrey,
+    border: palette.blueyGrey,
   },
   spacing: {
     xs: 4,
     s: 8,
     m: 16,
+    ml: 20,
     l: 24,
     xl: 48,
   },
@@ -43,15 +50,27 @@ export const theme = {
       fontSize: 26,
       lineHeight: 36,
       fontFamily: "SFProDisplay-Bold",
-      color: "secondary",
+      color: "text",
     },
     title2: {
       fontSize: 20, // 20
       lineHeight: 28,
       fontFamily: "SFProDisplay-Semibold",
-      color: "secondary",
+      color: "text",
     },
-    label: {
+    title3: {
+      fontSize: 16, // 20
+      lineHeight: 24,
+      fontFamily: "SFProDisplay-Semibold",
+      color: "text",
+    },
+    label1: {
+      fontSize: 14,
+      lineHeight: 20,
+      fontFamily: "SFProDisplay-Semibold",
+      color: "label",
+    },
+    label2: {
       fontSize: 14,
       lineHeight: 20,
       fontFamily: "SFProDisplay-Heavy",
@@ -78,10 +97,6 @@ export const makeStyles = <T extends NamedStyles<T>>(
   const reTheme = useReTheme();
   return styles(reTheme);
 };
-
-export const Text = createText<Theme>();
-
-export const Box = createBox<Theme>();
 
 export const useReTheme = () => useTheme<Theme>();
 

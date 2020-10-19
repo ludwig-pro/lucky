@@ -1,11 +1,12 @@
+import { Ionicons } from "@expo/vector-icons";
 import * as React from "react";
-// import { createStackNavigator } from "@react-navigation/stack";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 
 import Insurance from "../screens/Insurance";
-import Inventory from "../screens/Inventory";
+import { Inventory } from "../screens/Inventory";
 import Profile from "../screens/Profile";
 import Protection from "../screens/Protection";
+import { useReTheme } from "../theme";
 
 import {
   InsuranceParamList,
@@ -43,13 +44,26 @@ export const InsuranceNavigator = () => {
   );
 };
 
+export const HeaderRight = () => {
+  const theme = useReTheme();
+  return (
+    <Ionicons name="ios-add-circle" size={28} color={theme.colors.primary} />
+  );
+};
+
 export const InventoryNavigator = () => {
   return (
     <InventoryStack.Navigator>
       <InventoryStack.Screen
         name="InventoryScreen"
         component={Inventory}
-        options={{ headerTitle: "Inventory Title", headerLargeTitle: true }}
+        options={{
+          title: "Inventory Fallback",
+          headerTitle: "Inventory",
+          headerLargeTitle: true,
+          headerRight: () => <HeaderRight />,
+          headerHideShadow: true,
+        }}
       />
     </InventoryStack.Navigator>
   );

@@ -2,14 +2,17 @@ import * as React from "react";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 
 import fonts from "../theme/fonts";
+import { assets as InventoryAssets } from "../screens/Inventory";
 
 import LoadAssets from "./LoadAssets";
 import BottomTabNavigator from "./BottomTabNavigator";
 import { RootStackParamList } from "./types";
 
+const assets = [...InventoryAssets];
+
 const Navigation = () => {
   return (
-    <LoadAssets {...{ fonts }}>
+    <LoadAssets {...{ fonts, assets }}>
       <RootNavigator />
     </LoadAssets>
   );
