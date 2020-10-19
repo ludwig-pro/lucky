@@ -13,6 +13,7 @@ export const theme = {
   colors: {
     primary: palette.blue,
     text: palette.black,
+    label: palette.blueyGrey,
     tabIconDefault: palette.blueyGrey,
     tabIconSelected: palette.blue,
   },
@@ -38,23 +39,23 @@ export const theme = {
     xl: 56,
   },
   textVariants: {
-    hero: {
-      fontSize: 70,
-      lineHeight: 80,
-      fontFamily: "SFProDisplay-Bold",
-      color: "white",
-      textAlign: "center",
-    },
     title1: {
-      fontSize: 28,
+      fontSize: 26,
+      lineHeight: 36,
       fontFamily: "SFProDisplay-Bold",
       color: "secondary",
     },
     title2: {
-      fontSize: 24,
-      lineHeight: 30,
+      fontSize: 20, // 20
+      lineHeight: 28,
       fontFamily: "SFProDisplay-Semibold",
       color: "secondary",
+    },
+    label: {
+      fontSize: 14,
+      lineHeight: 20,
+      fontFamily: "SFProDisplay-Heavy",
+      color: "label",
     },
     body: {
       fontSize: 16,
@@ -63,14 +64,10 @@ export const theme = {
       lineHeight: 24,
     },
     button: {
-      fontSize: 15,
-      fontFamily: "SFProDisplay-Medium",
-    },
-    header: {
-      fontSize: 12,
-      fontFamily: "SFProDisplay-Semibold",
-      lineHeight: 24,
+      fontSize: 16,
+      fontFamily: "SFProDisplay-Heavy",
       color: "secondary",
+      lineHeight: 24,
     },
   },
 };
