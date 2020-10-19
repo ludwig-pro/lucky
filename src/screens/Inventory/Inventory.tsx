@@ -1,10 +1,12 @@
 import * as React from "react";
 import { matchSorter } from "match-sorter";
-import { ScrollView } from "react-native";
+import { ImageRequireSource, ScrollView } from "react-native";
 
 import { Box, SearchBar } from "../../components";
+import { InventoryRoutes, StackNavigationProps } from "../../navigation/types";
 
 import Card from "./Card";
+import { ValuableProduct } from "./types";
 
 const PLACEHOLDER_TEXT = "Search 4 items";
 
@@ -13,9 +15,9 @@ export const assets = [
   require("../../../assets/lou_necklace.jpg"),
   require("../../../assets/chanel_pearl.jpg"),
   require("../../../assets/rolex_daytona.jpg"),
-];
+] as ImageRequireSource[];
 
-const items = [
+export const items = [
   {
     id: 1,
     rank: 1,
@@ -78,20 +80,24 @@ const searchConfig = {
   keys: [{ threshold: matchSorter.rankings.STARTS_WITH, key: "name" }],
 };
 
-const Inventory = () => {
+const Inventory = ({
+  navigation,
+}: StackNavigationProps<InventoryRoutes, "Inventory">) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [inventories, setInventories] = React.useState(items);
-
-  const onChangeSearch = (query: string) => {
-    setSearchQuery(query);
-  };
 
   React.useEffect(() => {
     const match = matchSorter(items, searchQuery, searchConfig);
     setInventories(match);
   }, [searchQuery]);
 
-  console.log("searchQuery", searchQuery);
+  const onChangeSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const navigateToValuableDetails = (valuableId: ValuableProduct["id"]) =>
+    navigation.navigate("ValuableDetails", { valuableId });
+
   return (
     <ScrollView>
       <Box
@@ -118,7 +124,13 @@ const Inventory = () => {
           .sort((a, b) => a.rank - b.rank)
           .map((item) => (
             <Box key={item.id} paddingBottom="ml">
-              <Card title={item.name} price={item.price} source={item.source} />
+              <Card
+                id={item.id}
+                title={item.name}
+                price={item.price}
+                source={item.source}
+                onPress={navigateToValuableDetails}
+              />
             </Box>
           ))}
       </Box>

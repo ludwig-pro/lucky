@@ -3,9 +3,7 @@ import * as React from "react";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 
 import Insurance from "../screens/Insurance";
-import { Inventory } from "../screens/Inventory";
-import Profile from "../screens/Profile";
-import Protection from "../screens/Protection";
+import { ValuableDetails, Inventory, Protection, Profile } from "../screens";
 import { useReTheme } from "../theme";
 
 import {
@@ -51,11 +49,22 @@ export const HeaderRight = () => {
   );
 };
 
+export const HeaderLeft = () => {
+  const theme = useReTheme();
+  return (
+    <Ionicons
+      name="ios-close-circle"
+      size={28}
+      color={theme.colors.tabIconDefault}
+    />
+  );
+};
+
 export const InventoryNavigator = () => {
   return (
     <InventoryStack.Navigator>
       <InventoryStack.Screen
-        name="InventoryScreen"
+        name="Inventory"
         component={Inventory}
         options={{
           title: "Inventory Fallback",
@@ -63,6 +72,13 @@ export const InventoryNavigator = () => {
           headerLargeTitle: true,
           headerRight: () => <HeaderRight />,
           headerHideShadow: true,
+        }}
+      />
+      <InventoryStack.Screen
+        name="ValuableDetails"
+        component={ValuableDetails}
+        options={{
+          headerShown: false,
         }}
       />
     </InventoryStack.Navigator>

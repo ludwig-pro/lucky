@@ -1,3 +1,8 @@
+import { ParamListBase, RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "react-native-screens/native-stack";
+
+import { ValuableProduct } from "../screens/Inventory/types";
+
 export type RootStackParamList = {
   Root: undefined;
   NotFound: undefined;
@@ -19,9 +24,34 @@ export type InsuranceParamList = {
 };
 
 export type InventoryParamList = {
-  InventoryScreen: undefined;
+  Inventory: undefined;
+  ValuableDetails: undefined;
 };
 
 export type ProfileParamList = {
   ProfileScreen: undefined;
+};
+
+export type ValuableDetailsParamList = {
+  valuableId: number;
+};
+
+export interface InventoryNavigationProps<
+  RouteName extends keyof InventoryParamList
+> {
+  navigation: StackNavigationProps<InventoryRoutes, RouteName>;
+  route: RouteProp<InventoryParamList, RouteName>;
+}
+
+export interface StackNavigationProps<
+  ParamList extends ParamListBase,
+  RouteName extends keyof ParamList = string
+> {
+  navigation: NativeStackNavigationProp<ParamList, RouteName>;
+  route: RouteProp<ParamList, RouteName>;
+}
+
+export type InventoryRoutes = {
+  Inventory: undefined;
+  ValuableDetails: { valuableId: ValuableProduct["id"] };
 };

@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { Theme } from "../theme";
 
-import { Box, Text } from "./Themed";
+import { Box } from "./Themed";
 
 export interface IconProps {
   name: string;
@@ -31,13 +31,9 @@ const Icon = ({
       alignItems="center"
       style={{ borderRadius: size / 2 }}
     >
-      <Text color={color}>
-        <Ionicons
-          style={{ width: iconSize, height: iconSize }}
-          name={name}
-          size={iconSize}
-        />
-      </Text>
+      <Box flex={1} justifyContent="center" alignItems="center">
+        <Ionicons name={name} size={iconSize} color={color} />
+      </Box>
     </Box>
   );
 };

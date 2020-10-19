@@ -9,6 +9,7 @@ const palette = {
   paleGrey: "#f6f7fc",
   white: "#FFFFFF",
   primary: "#0042da",
+  lightPeriwinkle: "#dee0e6",
 };
 
 export const theme = {
@@ -22,10 +23,12 @@ export const theme = {
     placeholder: palette.blueyGrey,
     iosBackground: palette.paleGrey,
     border: palette.blueyGrey,
+    separator: palette.lightPeriwinkle,
   },
   spacing: {
     xs: 4,
     s: 8,
+    sm: 10,
     m: 16,
     ml: 20,
     l: 24,
@@ -49,7 +52,7 @@ export const theme = {
     title1: {
       fontSize: 26,
       lineHeight: 36,
-      fontFamily: "SFProDisplay-Bold",
+      fontFamily: "SFProDisplay-Semibold",
       color: "text",
     },
     title2: {
@@ -61,8 +64,8 @@ export const theme = {
     title3: {
       fontSize: 16, // 20
       lineHeight: 24,
-      fontFamily: "SFProDisplay-Semibold",
-      color: "text",
+      fontFamily: "SFProDisplay-Regular",
+      color: "placeholder",
     },
     label1: {
       fontSize: 14,
@@ -71,9 +74,9 @@ export const theme = {
       color: "label",
     },
     label2: {
-      fontSize: 14,
+      fontSize: 16,
       lineHeight: 20,
-      fontFamily: "SFProDisplay-Heavy",
+      fontFamily: "SFProDisplay-Semibold",
       color: "label",
     },
     body: {
