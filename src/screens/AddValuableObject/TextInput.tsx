@@ -5,10 +5,11 @@ import {
   StyleSheet,
   StyleProp,
   TextStyle,
+  ViewStyle,
 } from "react-native";
 import Animated from "react-native-reanimated";
 
-import { Text } from "../../components";
+import { Text, Box } from "../../components";
 import { Theme, useReTheme } from "../../theme";
 
 import useReanimatedOpacity from "./useReanimatedOpacity";
@@ -22,6 +23,8 @@ interface TextInputProps extends NativeTextInput {
   underlineColor?: keyof Theme["colors"];
   value?: string;
   style?: StyleProp<TextStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+  picker?: boolean;
   // should i keep this props ?
   editable?: boolean;
   multiline?: boolean;
@@ -43,6 +46,7 @@ export const TextInput: FC<TextInputProps> = ({
   onFocus,
   onBlur,
   style,
+  containerStyle,
   ...rest
 }) => {
   const theme = useReTheme();
@@ -100,7 +104,6 @@ export const TextInput: FC<TextInputProps> = ({
     placeholderTextColor = theme.colors.placeholder;
     outlineColor = theme.colors.placeholder;
   } else {
-    // textColor = colors.gray800;
     textColor = theme.colors.dark;
     activeColor = error ? theme.colors.error : theme.colors.primary;
     backgroundColor = theme.colors.white;
@@ -119,7 +122,7 @@ export const TextInput: FC<TextInputProps> = ({
   };
 
   return (
-    <>
+    <Box style={containerStyle}>
       {label && (
         <Animated.View style={{ opacity }}>
           <Text variant="label3" style={[styles.label]}>
@@ -129,6 +132,7 @@ export const TextInput: FC<TextInputProps> = ({
       )}
       <View>
         <View style={[styles.outline, outlineStyle]} pointerEvents="none" />
+
         <NativeTextInput
           placeholder={focused ? "" : placeholder}
           style={[
@@ -152,7 +156,7 @@ export const TextInput: FC<TextInputProps> = ({
           {...rest}
         />
       </View>
-    </>
+    </Box>
   );
 };
 

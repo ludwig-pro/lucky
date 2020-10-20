@@ -7,13 +7,25 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 import { Box, Icon, Text } from "../../components";
 import { useReTheme } from "../../theme";
 
-const Camera = () => {
+interface CameraProps {
+  containerStyle?: StyleProp<ViewStyle>;
+  iconName?: string;
+  label?: string;
+}
+
+const Camera = ({
+  containerStyle,
+  iconName = "ios-camera",
+  label = "Add Photo",
+}: CameraProps) => {
   const [image, setImage] = React.useState<string>();
   const theme = useReTheme();
 
@@ -82,7 +94,7 @@ const Camera = () => {
     );
 
   return (
-    <Box paddingHorizontal="ml" paddingVertical="ml">
+    <Box style={containerStyle}>
       <Box alignItems="center" justifyContent="center">
         <TouchableOpacity onPress={onPress}>
           <Box
@@ -110,12 +122,12 @@ const Camera = () => {
             ) : (
               <>
                 <Icon
-                  name="ios-camera"
+                  name={iconName}
                   size={48}
                   color="primary"
                   backgroundColor="white"
                 />
-                <Text variant="title3">Add Photo</Text>
+                <Text variant="title3">{label}</Text>
               </>
             )}
           </Box>

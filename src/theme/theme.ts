@@ -11,6 +11,7 @@ const palette = {
   primary: "#0042da",
   lightPeriwinkle: "#dee0e6",
   redLight: "#CB444A",
+  darkPeriwinkle: "#D2D3D8",
 };
 
 export const theme = {
@@ -28,6 +29,8 @@ export const theme = {
     border: palette.blueyGrey,
     separator: palette.lightPeriwinkle,
     dash: palette.lightPeriwinkle,
+    keyboardBar: palette.lightPeriwinkle,
+    keyboardBackground: palette.darkPeriwinkle,
     error: palette.redLight,
   },
   spacing: {
