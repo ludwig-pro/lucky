@@ -7,16 +7,18 @@ import {
   TextStyle,
   ViewStyle,
 } from "react-native";
-import Animated from "react-native-reanimated";
+import { Value } from "react-native-reanimated";
 
-import { Text, Box } from "../../components";
-import { Theme, useReTheme } from "../../theme";
+import { Theme, useReTheme } from "../theme";
+import useReanimatedOpacity from "../hooks/useReanimatedOpacity";
 
-import useReanimatedOpacity from "./useReanimatedOpacity";
+import WithLabel from "./WithLabel";
+
+import { Box } from ".";
 
 type TextInputProps = React.ComponentProps<typeof NativeTextInput> & {
-  disabled?: boolean; // OK
-  label?: string; // floating label
+  disabled?: boolean;
+  label?: string;
   placeholder?: string;
   error?: boolean;
   onChangeText?: (text: string) => void;
@@ -39,7 +41,6 @@ export const TextInput: FC<TextInputProps> = ({
   error = false,
   multiline = false,
   numberOfLines = 1,
-  label,
   placeholder = "",
   value = "",
   onChangeText,
@@ -47,14 +48,15 @@ export const TextInput: FC<TextInputProps> = ({
   onBlur,
   style,
   containerStyle,
+  label,
   ...rest
 }) => {
   const theme = useReTheme();
-  const { startAnimation, opacity } = useReanimatedOpacity();
   const [focused, setFocused] = React.useState(false);
   const [text, setText] = React.useState(value);
+  const { startAnimation, opacity } = useReanimatedOpacity();
   const height = 48;
-  const startValue = (1 as unknown) as typeof startAnimation;
+  const startValue = (1 as unknown) as Value<1>;
 
   const handleFocus = (args: unknown) => {
     if (disabled || !editable) {
@@ -122,17 +124,9 @@ export const TextInput: FC<TextInputProps> = ({
   };
 
   return (
-    <Box style={containerStyle}>
-      {label && (
-        <Animated.View style={{ opacity }}>
-          <Text variant="label3" style={[styles.label]}>
-            {label}
-          </Text>
-        </Animated.View>
-      )}
-      <View>
+    <WithLabel label={label} containerStyle={containerStyle} opacity={opacity}>
+      <Box>
         <View style={[styles.outline, outlineStyle]} pointerEvents="none" />
-
         <NativeTextInput
           placeholder={focused ? "" : placeholder}
           style={[
@@ -155,8 +149,8 @@ export const TextInput: FC<TextInputProps> = ({
           numberOfLines={numberOfLines}
           {...rest}
         />
-      </View>
-    </Box>
+      </Box>
+    </WithLabel>
   );
 };
 
@@ -174,13 +168,6 @@ const styles = StyleSheet.create({
   },
   outline: {
     position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    zIndex: 9999,
-  },
-  label: {
     left: 0,
     right: 0,
     top: 0,

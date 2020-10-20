@@ -19,7 +19,7 @@ const { useRef } = React;
 
 function useReanimatedOpacity() {
   const clock = useRef(new Clock()).current;
-  const startAnimation = useRef(new Value(0)).current;
+  const startAnimation = useRef(new Value<0 | 1>(0)).current;
   const startTime = useRef(new Value(0)).current;
   const duration = 200;
   const endTime = add(startTime, duration);

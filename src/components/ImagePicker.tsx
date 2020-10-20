@@ -10,12 +10,13 @@ import {
   StyleProp,
   ViewStyle,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import * as ExpoImagePicker from "expo-image-picker";
 
-import { Box, Icon, Text } from "../../components";
-import { useReTheme } from "../../theme";
+import { useReTheme } from "../theme";
 
-interface CameraProps {
+import { Box, Icon, Text } from ".";
+
+interface ImagePickerProps {
   containerStyle?: StyleProp<ViewStyle>;
   iconName?: string;
   label?: string;
@@ -23,13 +24,13 @@ interface CameraProps {
   onImagePick: (URI: string) => void;
 }
 
-const Camera = ({
+const ImagePicker = ({
   containerStyle,
   iconName = "ios-camera",
   label = "Add Photo",
   image,
   onImagePick,
-}: CameraProps) => {
+}: ImagePickerProps) => {
   const theme = useReTheme();
 
   React.useEffect(() => {
@@ -37,10 +38,10 @@ const Camera = ({
       if (Platform.OS !== "web") {
         const {
           status: cameraRollStatus,
-        } = await ImagePicker.requestCameraRollPermissionsAsync();
+        } = await ExpoImagePicker.requestCameraRollPermissionsAsync();
         const {
           status: cameraStatus,
-        } = await ImagePicker.requestCameraPermissionsAsync();
+        } = await ExpoImagePicker.requestCameraPermissionsAsync();
         if (cameraRollStatus !== "granted") {
           alert("Sorry, we need camera roll permissions to make this work!");
         }
@@ -52,8 +53,8 @@ const Camera = ({
   }, []);
 
   const pickCamera = async () => {
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+    const result = await ExpoImagePicker.launchCameraAsync({
+      mediaTypes: ExpoImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -66,8 +67,8 @@ const Camera = ({
   };
 
   const pickCameraRoll = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+    const result = await ExpoImagePicker.launchImageLibraryAsync({
+      mediaTypes: ExpoImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -107,8 +108,8 @@ const Camera = ({
             borderRadius="ml"
             alignItems="center"
             justifyContent="center"
-            borderStyle="dashed"
-            borderWidth={image ? 0 : 2}
+            borderStyle={image ? "solid" : "dashed"}
+            borderWidth={image ? StyleSheet.hairlineWidth : 2}
             borderColor="dash"
             overflow="hidden"
           >
@@ -140,4 +141,4 @@ const Camera = ({
   );
 };
 
-export default Camera;
+export default ImagePicker;

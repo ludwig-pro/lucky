@@ -1,12 +1,11 @@
 import * as React from "react";
 import { StyleSheet, StyleProp, ViewStyle, View } from "react-native";
 import SelectInput from "react-native-select-input-ios";
-import Animated from "react-native-reanimated";
+import { Value } from "react-native-reanimated";
 
-import { Box, Text } from "../../components";
+import { Box, WithLabel } from "../../components";
 import { useReTheme } from "../../theme";
-
-import useReanimatedOpacity from "./useReanimatedOpacity";
+import useReanimatedOpacity from "../../hooks/useReanimatedOpacity";
 
 interface ValuablePickerProps {
   containerStyle?: StyleProp<ViewStyle>;
@@ -21,11 +20,11 @@ interface ValuablePickerProps {
 const ValuablePicker = ({
   initialOptions,
   initialValue = 0,
-  containerStyle,
   disabled = false,
   error = false,
-  label,
   onChangeItem,
+  label,
+  containerStyle,
 }: ValuablePickerProps) => {
   const theme = useReTheme();
   const [value, setValue] = React.useState(initialValue);
@@ -33,19 +32,22 @@ const ValuablePicker = ({
   const [show, setShow] = React.useState(false);
   const { startAnimation, opacity } = useReanimatedOpacity();
 
+  const startValue = (1 as unknown) as Value<1>;
+
   React.useEffect(() => {
     if (value !== 0 && show === false) {
+      console.log("appear");
       startAnimation.setValue(startValue);
       setShow(true);
     }
     if (value === 0 && show === true) {
+      console.log("deappear");
+
       startAnimation.setValue(startValue);
       setShow(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
-
-  const startValue = (1 as unknown) as typeof startAnimation;
 
   let activeColor;
   let outlineColor;
@@ -66,57 +68,50 @@ const ValuablePicker = ({
   };
 
   return (
-    <Box style={containerStyle}>
-      {label && (
-        <Animated.View style={{ opacity }}>
-          <Text variant="label3" style={styles.label}>
-            {label}
-          </Text>
-        </Animated.View>
-      )}
-      <View style={[styles.outline, outlineStyle]} pointerEvents="none" />
-
-      <SelectInput
-        value={value}
-        options={initialOptions}
-        style={styles.inputContainer}
-        buttonsTextStyle={{ fontSize: 16, fontFamily: "SFProDisplay-Medium" }}
-        buttonsViewStyle={{
-          paddingHorizontal: theme.spacing.sm,
-          height: 48,
-          alignItems: "center",
-          backgroundColor: theme.colors.keyboardBar,
-        }}
-        labelStyle={{
-          textAlign: "left",
-          color: value === 0 ? theme.colors.placeholder : theme.colors.dark,
-          fontFamily: "SFProDisplay-Regular",
-          fontSize: 16,
-          lineHeight: 24,
-        }}
-        pickerViewStyle={{
-          backgroundColor: theme.colors.keyboardBackground,
-        }}
-        onValueChange={(itemValue: number) => {
-          setValue(itemValue);
-          onChangeItem(initialOptions[itemValue].label);
-        }}
-        onBeginEditing={() => {
-          setFocused(true);
-        }}
-        onEndEditing={() => {
-          setFocused(false);
-          onChangeItem(initialOptions[0].label);
-
-          setValue(0);
-        }}
-        onSubmitEditing={(itemValue: number) => {
-          setValue(itemValue);
-          onChangeItem(initialOptions[itemValue].label);
-          setFocused(false);
-        }}
-      />
-    </Box>
+    <WithLabel label={label} containerStyle={containerStyle} opacity={opacity}>
+      <Box>
+        <View style={[styles.outline, outlineStyle]} pointerEvents="none" />
+        <SelectInput
+          value={value}
+          options={initialOptions}
+          style={styles.inputContainer}
+          buttonsTextStyle={{ fontSize: 16, fontFamily: "SFProDisplay-Medium" }}
+          buttonsViewStyle={{
+            paddingHorizontal: theme.spacing.sm,
+            height: 48,
+            alignItems: "center",
+            backgroundColor: theme.colors.keyboardBar,
+          }}
+          labelStyle={{
+            textAlign: "left",
+            color: value === 0 ? theme.colors.placeholder : theme.colors.dark,
+            fontFamily: "SFProDisplay-Regular",
+            fontSize: 16,
+            lineHeight: 24,
+          }}
+          pickerViewStyle={{
+            backgroundColor: theme.colors.keyboardBackground,
+          }}
+          onValueChange={(itemValue: number) => {
+            setValue(itemValue);
+            onChangeItem(initialOptions[itemValue].label);
+          }}
+          onBeginEditing={() => {
+            setFocused(true);
+          }}
+          onEndEditing={() => {
+            setFocused(false);
+            onChangeItem(initialOptions[0].label);
+            setValue(0);
+          }}
+          onSubmitEditing={(itemValue: number) => {
+            setValue(itemValue);
+            onChangeItem(initialOptions[itemValue].label);
+            setFocused(false);
+          }}
+        />
+      </Box>
+    </WithLabel>
   );
 };
 
@@ -129,13 +124,6 @@ const styles = StyleSheet.create({
   },
   outline: {
     position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    zIndex: 9999,
-  },
-  label: {
     left: 0,
     right: 0,
     top: 0,

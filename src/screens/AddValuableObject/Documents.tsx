@@ -1,10 +1,9 @@
 import * as React from "react";
-import { StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { StyleProp, ViewStyle } from "react-native";
 
-import { Box, Text } from "../../components";
+import { Box, WithLabel } from "../../components";
 import { useReTheme } from "../../theme";
-
-import Camera from "./Camera";
+import ImagePicker from "../../components/ImagePicker";
 
 interface DocumentsProps {
   containerStyle?: StyleProp<ViewStyle>;
@@ -24,36 +23,23 @@ const Documents = ({
 }: DocumentsProps) => {
   const theme = useReTheme();
   return (
-    <Box style={containerStyle}>
-      <Text variant="label3" style={styles.label}>
-        {label}
-      </Text>
+    <WithLabel label={label} containerStyle={containerStyle} opacity={1}>
       <Box paddingTop="m" flexDirection="row">
-        <Camera
+        <ImagePicker
           containerStyle={{ paddingRight: theme.spacing.m }}
           iconName="ios-document"
           label="Add Receipt"
           image={documents?.receipt}
           onImagePick={onDocumentPick("receipt")}
         />
-        <Camera
+        <ImagePicker
           label="Add Photos"
           image={documents?.picture}
           onImagePick={onDocumentPick("picture")}
         />
       </Box>
-    </Box>
+    </WithLabel>
   );
 };
 
 export default Documents;
-
-const styles = StyleSheet.create({
-  label: {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    zIndex: 9999,
-  },
-});

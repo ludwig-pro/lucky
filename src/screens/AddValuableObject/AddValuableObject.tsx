@@ -1,14 +1,12 @@
 import * as React from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import { Box, Header } from "../../components";
+import { Box, Header, DatePicker, TextInput } from "../../components";
 import { InventoryRoutes, StackNavigationProps } from "../../navigation/types";
 import { theme } from "../../theme";
+import ImagePicker from "../../components/ImagePicker";
 
-import TextInput from "./TextInput";
 import ValuablePicker from "./ValuablePicker";
-import Camera from "./Camera";
-import DatePicker from "./DatePicker";
 import Documents from "./Documents";
 
 const initialOptions = [
@@ -22,7 +20,7 @@ const initialOptions = [
 type DocumentsType = {
   receipt?: string;
   picture?: string;
-}; // TODO 🚧
+};
 
 const AddValuableObject = ({
   navigation,
@@ -52,7 +50,7 @@ const AddValuableObject = ({
           }}
           title="New Object"
         />
-        <Camera
+        <ImagePicker
           containerStyle={{
             paddingHorizontal: theme.spacing.ml,
             paddingVertical: theme.spacing.ml,
@@ -87,7 +85,6 @@ const AddValuableObject = ({
             placeholder="Description(optional)"
             onChangeText={(text) => setDescription(text)}
             containerStyle={{ marginBottom: theme.spacing.ml }}
-            multiline
             numberOfLines={1}
           />
           <Documents

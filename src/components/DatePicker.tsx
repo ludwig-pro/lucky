@@ -6,14 +6,15 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import Animated from "react-native-reanimated";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 
-import { Text, Box } from "../../components";
-import { useReTheme } from "../../theme";
+import { useReTheme } from "../theme";
+import useReanimatedOpacity from "../hooks/useReanimatedOpacity";
 
-import useReanimatedOpacity from "./useReanimatedOpacity";
+import WithLabel from "./WithLabel";
+
+import { Text, Box } from ".";
 
 interface DatePickerProps {
   containerStyle?: StyleProp<ViewStyle>;
@@ -93,15 +94,8 @@ const DatePicker = ({
   };
 
   return (
-    <>
-      <Box style={containerStyle}>
-        {label && (
-          <Animated.View style={{ opacity }}>
-            <Text variant="label3" style={styles.label}>
-              {label}
-            </Text>
-          </Animated.View>
-        )}
+    <WithLabel label={label} containerStyle={containerStyle} opacity={opacity}>
+      <Box>
         <View style={[styles.outline, outlineStyle]} pointerEvents="none" />
         <TouchableWithoutFeedback onPress={displayPicker}>
           <Box style={{ height: 48, justifyContent: "center" }}>
@@ -117,31 +111,24 @@ const DatePicker = ({
             </Text>
           </Box>
         </TouchableWithoutFeedback>
+        <DateTimePickerModal
+          isVisible={show}
+          mode="date"
+          headerTextIOS={label}
+          onConfirm={handleConfirm}
+          onCancel={cancelHandler}
+          onHide={() => setFocused(false)}
+          isDarkModeEnabled={false}
+          textColor={theme.colors.dark}
+        />
       </Box>
-      <DateTimePickerModal
-        isVisible={show}
-        mode="date"
-        headerTextIOS={label}
-        onConfirm={handleConfirm}
-        onCancel={cancelHandler}
-        onHide={() => setFocused(false)}
-        isDarkModeEnabled={false}
-        textColor={theme.colors.dark}
-      />
-    </>
+    </WithLabel>
   );
 };
 
 export default DatePicker;
 
 const styles = StyleSheet.create({
-  label: {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    zIndex: 9999,
-  },
   outline: {
     position: "absolute",
     left: 0,
