@@ -14,7 +14,7 @@ import { Theme, useReTheme } from "../../theme";
 
 import useReanimatedOpacity from "./useReanimatedOpacity";
 
-interface TextInputProps extends NativeTextInput {
+type TextInputProps = React.ComponentProps<typeof NativeTextInput> & {
   disabled?: boolean; // OK
   label?: string; // floating label
   placeholder?: string;
@@ -31,7 +31,7 @@ interface TextInputProps extends NativeTextInput {
   numberOfLines?: number;
   onFocus?: (args: unknown) => void;
   onBlur?: (args: unknown) => void;
-}
+};
 
 export const TextInput: FC<TextInputProps> = ({
   disabled = false,

@@ -9,7 +9,10 @@ import Camera from "./Camera";
 interface DocumentsProps {
   containerStyle?: StyleProp<ViewStyle>;
   label: string;
-  documents: unknown;
+  documents?: {
+    receipt?: string;
+    picture?: string;
+  };
   onDocumentPick: (type: string) => (decodeURI: string) => void;
 }
 

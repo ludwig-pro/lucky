@@ -19,14 +19,17 @@ const initialOptions = [
   { value: 4, label: "Music Instruments" },
 ];
 
-type DocumentsType = unknown; // TODO 🚧
+type DocumentsType = {
+  receipt?: string;
+  picture?: string;
+}; // TODO 🚧
 
 const AddValuableObject = ({
   navigation,
 }: StackNavigationProps<InventoryRoutes, "Inventory">) => {
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [category, setCategory] = React.useState("");
+  const [_, setCategory] = React.useState("");
   const [date, setDate] = React.useState<string | undefined>();
   const [mainImage, setMainImage] = React.useState<string | undefined>();
   const [documents, setDocuments] = React.useState<DocumentsType | undefined>();
@@ -91,7 +94,7 @@ const AddValuableObject = ({
             label="Documents"
             documents={documents}
             onDocumentPick={(type) => (documentURI) =>
-              setDocuments((prevDocuments: DocumentsType) => ({
+              setDocuments((prevDocuments?: DocumentsType) => ({
                 [type]: documentURI,
                 ...prevDocuments,
               }))}
