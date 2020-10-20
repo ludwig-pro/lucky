@@ -19,14 +19,17 @@ interface CameraProps {
   containerStyle?: StyleProp<ViewStyle>;
   iconName?: string;
   label?: string;
+  image: string | undefined;
+  onImagePick: (URI: string) => void;
 }
 
 const Camera = ({
   containerStyle,
   iconName = "ios-camera",
   label = "Add Photo",
+  image,
+  onImagePick,
 }: CameraProps) => {
-  const [image, setImage] = React.useState<string>();
   const theme = useReTheme();
 
   React.useEffect(() => {
@@ -58,7 +61,7 @@ const Camera = ({
 
     if (!result.cancelled) {
       const imageURI = result.uri;
-      setImage(imageURI);
+      onImagePick(imageURI);
     }
   };
 
@@ -72,7 +75,7 @@ const Camera = ({
 
     if (!result.cancelled) {
       const imageURI = result.uri;
-      setImage(imageURI);
+      onImagePick(imageURI);
     }
   };
 

@@ -19,11 +19,17 @@ const initialOptions = [
   { value: 4, label: "Music Instruments" },
 ];
 
+type DocumentsType = unknown; // TODO 🚧
+
 const AddValuableObject = ({
   navigation,
 }: StackNavigationProps<InventoryRoutes, "Inventory">) => {
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [category, setCategory] = React.useState("");
+  const [date, setDate] = React.useState<string | undefined>();
+  const [mainImage, setMainImage] = React.useState<string | undefined>();
+  const [documents, setDocuments] = React.useState<DocumentsType | undefined>();
 
   return (
     <KeyboardAwareScrollView
@@ -48,6 +54,8 @@ const AddValuableObject = ({
             paddingHorizontal: theme.spacing.ml,
             paddingVertical: theme.spacing.ml,
           }}
+          image={mainImage}
+          onImagePick={(imageURI: string) => setMainImage(imageURI)}
         />
         <Box paddingHorizontal="ml">
           <TextInput
@@ -62,10 +70,13 @@ const AddValuableObject = ({
             initialOptions={initialOptions}
             initialValue={0}
             containerStyle={{ marginBottom: theme.spacing.ml }}
+            onChangeItem={setCategory}
           />
           <DatePicker
             label="Purchase Date"
             containerStyle={{ marginBottom: theme.spacing.ml }}
+            date={date}
+            onChangeDate={(newDate: string | undefined) => setDate(newDate)}
           />
           <TextInput
             value={description}
@@ -76,7 +87,15 @@ const AddValuableObject = ({
             multiline
             numberOfLines={1}
           />
-          <Documents label="Documents" />
+          <Documents
+            label="Documents"
+            documents={documents}
+            onDocumentPick={(type) => (documentURI) =>
+              setDocuments((prevDocuments: DocumentsType) => ({
+                [type]: documentURI,
+                ...prevDocuments,
+              }))}
+          />
         </Box>
       </Box>
     </KeyboardAwareScrollView>

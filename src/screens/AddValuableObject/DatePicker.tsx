@@ -20,6 +20,8 @@ interface DatePickerProps {
   label?: string;
   disabled?: boolean;
   error?: boolean;
+  date?: string;
+  onChangeDate: (newDate: string | undefined) => void;
 }
 
 const DatePicker = ({
@@ -27,11 +29,12 @@ const DatePicker = ({
   label,
   disabled,
   error,
+  onChangeDate,
+  date,
 }: DatePickerProps) => {
   const theme = useReTheme();
   const { startAnimation, opacity } = useReanimatedOpacity();
   const [focused, setFocused] = React.useState(false);
-  const [date, setDate] = React.useState<string | undefined>();
   const [showLabel, setShowLabel] = React.useState(false);
   const [show, setShow] = React.useState(false);
   const startValue = (1 as unknown) as typeof startAnimation;
@@ -43,7 +46,7 @@ const DatePicker = ({
 
   const cancelHandler = () => {
     setShow(false);
-    setDate(undefined);
+    onChangeDate(undefined);
   };
 
   const hideDatePicker = () => {
@@ -64,7 +67,7 @@ const DatePicker = ({
   }, [date]);
 
   const handleConfirm = (selectedDate: Date) => {
-    setDate(format(new Date(selectedDate), "MM/dd/yyyy"));
+    onChangeDate(format(new Date(selectedDate), "MM/dd/yyyy"));
     hideDatePicker();
   };
 

@@ -9,9 +9,16 @@ import Camera from "./Camera";
 interface DocumentsProps {
   containerStyle?: StyleProp<ViewStyle>;
   label: string;
+  documents: unknown;
+  onDocumentPick: (type: string) => (decodeURI: string) => void;
 }
 
-const Documents = ({ containerStyle, label }: DocumentsProps) => {
+const Documents = ({
+  containerStyle,
+  label,
+  documents,
+  onDocumentPick,
+}: DocumentsProps) => {
   const theme = useReTheme();
   return (
     <Box style={containerStyle}>
@@ -23,8 +30,14 @@ const Documents = ({ containerStyle, label }: DocumentsProps) => {
           containerStyle={{ paddingRight: theme.spacing.m }}
           iconName="ios-document"
           label="Add Receipt"
+          image={documents?.receipt}
+          onImagePick={onDocumentPick("receipt")}
         />
-        <Camera label="Add Photos" />
+        <Camera
+          label="Add Photos"
+          image={documents?.picture}
+          onImagePick={onDocumentPick("picture")}
+        />
       </Box>
     </Box>
   );

@@ -15,6 +15,7 @@ interface ValuablePickerProps {
   label?: string;
   initialOptions: { value: number; label: string }[];
   initialValue: number;
+  onChangeItem: (item: string) => void;
 }
 
 const ValuablePicker = ({
@@ -24,6 +25,7 @@ const ValuablePicker = ({
   disabled = false,
   error = false,
   label,
+  onChangeItem,
 }: ValuablePickerProps) => {
   const theme = useReTheme();
   const [value, setValue] = React.useState(initialValue);
@@ -97,16 +99,20 @@ const ValuablePicker = ({
         }}
         onValueChange={(itemValue: number) => {
           setValue(itemValue);
+          onChangeItem(initialOptions[itemValue].label);
         }}
         onBeginEditing={() => {
           setFocused(true);
         }}
         onEndEditing={() => {
           setFocused(false);
+          onChangeItem(initialOptions[0].label);
+
           setValue(0);
         }}
         onSubmitEditing={(itemValue: number) => {
           setValue(itemValue);
+          onChangeItem(initialOptions[itemValue].label);
           setFocused(false);
         }}
       />
