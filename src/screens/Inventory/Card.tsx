@@ -8,7 +8,7 @@ import { Box, Text } from "../../components/Themed";
 interface CardProps {
   id: number;
   title: string;
-  price: string;
+  price: number;
   source: ImageRequireSource;
   onPress: (id: number) => void;
 }

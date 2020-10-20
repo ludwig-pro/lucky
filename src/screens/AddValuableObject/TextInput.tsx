@@ -6,7 +6,7 @@ import {
   StyleProp,
   TextStyle,
 } from "react-native";
-import Animated, { Adaptable } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
 import { Text } from "../../components";
 import { Theme, useReTheme } from "../../theme";
@@ -50,7 +50,7 @@ export const TextInput: FC<TextInputProps> = ({
   const [focused, setFocused] = React.useState(false);
   const [text, setText] = React.useState(value);
   const height = 48;
-  const startValue = 1 as Adaptable<0>;
+  const startValue = (1 as unknown) as typeof startAnimation;
 
   const handleFocus = (args: unknown) => {
     if (disabled || !editable) {
