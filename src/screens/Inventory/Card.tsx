@@ -5,14 +5,12 @@ import { BorderlessButton } from "react-native-gesture-handler";
 import { makeStyles, Theme } from "../../theme";
 import { Box, Text } from "../../components/Themed";
 
-import { ValuableProduct } from "./types";
-
 interface CardProps {
-  id: ValuableProduct["id"];
-  title: ValuableProduct["name"];
-  price: ValuableProduct["price"];
+  id: number;
+  title: string;
+  price: string;
   source: ImageRequireSource;
-  onPress: (id: ValuableProduct["id"]) => void;
+  onPress: (id: number) => void;
 }
 
 const Card = ({ id, title, price, source, onPress }: CardProps) => {

@@ -1,6 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as React from "react";
-import { createNativeStackNavigator } from "react-native-screens/native-stack";
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from "react-native-screens/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import { BorderlessButton } from "react-native-gesture-handler";
 
 import Insurance from "../screens/Insurance";
 import {
@@ -9,12 +14,14 @@ import {
   Protection,
   Profile,
   Document,
+  AddValuableObject,
 } from "../screens";
 import { useReTheme } from "../theme";
 
 import {
   InsuranceParamList,
   InventoryParamList,
+  InventoryRoutes,
   ProfileParamList,
   ProtectionParamList,
 } from "./types";
@@ -50,8 +57,14 @@ export const InsuranceNavigator = () => {
 
 export const HeaderRight = () => {
   const theme = useReTheme();
+  const { navigate } = useNavigation<
+    NativeStackNavigationProp<InventoryRoutes, "Inventory">
+  >();
+
   return (
-    <Ionicons name="ios-add-circle" size={28} color={theme.colors.primary} />
+    <BorderlessButton onPress={() => navigate("AddValuableObject")}>
+      <Ionicons name="ios-add-circle" size={28} color={theme.colors.primary} />
+    </BorderlessButton>
   );
 };
 
@@ -93,6 +106,13 @@ export const InventoryNavigator = () => {
         component={Document}
         options={{
           headerShown: false,
+          stackPresentation: "fullScreenModal",
+        }}
+      />
+      <InventoryStack.Screen
+        name="AddValuableObject"
+        component={AddValuableObject}
+        options={{
           stackPresentation: "fullScreenModal",
         }}
       />

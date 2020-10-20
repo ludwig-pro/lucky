@@ -27,6 +27,7 @@ export type InventoryParamList = {
   Inventory: undefined;
   ValuableDetails: undefined;
   Document: undefined;
+  AddValuableObject: undefined;
 };
 
 export type ProfileParamList = {
@@ -56,4 +57,5 @@ export type InventoryRoutes = {
   Inventory: undefined;
   ValuableDetails: { valuableId: ValuableProduct["id"] };
   Document: { documentId: number };
+  AddValuableObject: undefined;
 };

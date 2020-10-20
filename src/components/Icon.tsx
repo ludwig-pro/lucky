@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-import { Theme } from "../theme";
+import { Theme, useReTheme } from "../theme";
 
 import { Box } from "./Themed";
 
@@ -21,6 +21,7 @@ const Icon = ({
   iconRatio = 1,
 }: IconProps) => {
   const iconSize = size * iconRatio;
+  const theme = useReTheme();
 
   return (
     <Box
@@ -32,7 +33,7 @@ const Icon = ({
       style={{ borderRadius: size / 2 }}
     >
       <Box flex={1} justifyContent="center" alignItems="center">
-        <Ionicons name={name} size={iconSize} color={color} />
+        <Ionicons name={name} size={iconSize} color={theme.colors[color]} />
       </Box>
     </Box>
   );

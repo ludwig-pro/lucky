@@ -10,11 +10,13 @@ const palette = {
   white: "#FFFFFF",
   primary: "#0042da",
   lightPeriwinkle: "#dee0e6",
+  redLight: "#CB444A",
 };
 
 export const theme = {
   colors: {
     primary: palette.blue,
+    secondary: palette.blueyGrey,
     text: palette.black,
     label: palette.blueyGrey,
     tabIconDefault: palette.blueyGrey,
@@ -25,6 +27,8 @@ export const theme = {
     iosBackground: palette.paleGrey,
     border: palette.blueyGrey,
     separator: palette.lightPeriwinkle,
+    dash: palette.lightPeriwinkle,
+    error: palette.redLight,
   },
   spacing: {
     xs: 4,
@@ -50,6 +54,12 @@ export const theme = {
     xl: 56,
   },
   textVariants: {
+    header: {
+      fontSize: 16,
+      lineHeight: 20,
+      fontFamily: "SFProDisplay-Semibold",
+      color: "dark",
+    },
     title1: {
       fontSize: 26,
       lineHeight: 36,
@@ -66,6 +76,12 @@ export const theme = {
       fontSize: 16, // 20
       lineHeight: 24,
       fontFamily: "SFProDisplay-Regular",
+      color: "text",
+    },
+    title4: {
+      fontSize: 16, // 20
+      lineHeight: 24,
+      fontFamily: "SFProDisplay-Regular",
       color: "placeholder",
     },
     label1: {
@@ -78,6 +94,12 @@ export const theme = {
       fontSize: 16,
       lineHeight: 20,
       fontFamily: "SFProDisplay-Semibold",
+      color: "label",
+    },
+    label3: {
+      fontSize: 14,
+      lineHeight: 20,
+      fontFamily: "SFProDisplay-Regular",
       color: "label",
     },
     body: {
