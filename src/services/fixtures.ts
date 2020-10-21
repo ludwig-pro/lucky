@@ -1,7 +1,7 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { Image } from "react-native";
 
-import { ValuableObject } from "../models/reducers/inventory";
+import { ValuableObject } from "../models/Inventory/slices";
 
 export const assets = [
   require("../../assets/cartier_ring.png"),

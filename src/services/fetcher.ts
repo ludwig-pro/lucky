@@ -1,4 +1,4 @@
-import { ValuableObject } from "../models/reducers/inventory";
+import { ValuableObject } from "../models/Inventory";
 
 import { FAKE_DATA_INVENTORY } from "./fixtures";
 

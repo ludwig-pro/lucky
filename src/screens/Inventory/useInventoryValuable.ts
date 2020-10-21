@@ -6,7 +6,7 @@ import {
   fetchInventorByUserId,
   getInventoryValuableObject,
   FormatedValuableObject,
-} from "../../models/reducers/inventory";
+} from "../../models/Inventory";
 
 const searchConfig = {
   keys: [{ threshold: matchSorter.rankings.STARTS_WITH, key: "name" }],

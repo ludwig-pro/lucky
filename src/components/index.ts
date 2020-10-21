@@ -10,3 +10,5 @@ export { default as WithLabel } from "./WithLabel";
 export { default as ImagePicker } from "./ImagePicker";
 export { default as Picker } from "./Picker";
 export { default as CurrencyTextInput } from "./CurrencyTextInput";
+export { default as Button } from "./Button";
+export { Modal } from "./Modal";

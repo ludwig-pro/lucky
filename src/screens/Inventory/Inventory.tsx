@@ -1,24 +1,29 @@
 import * as React from "react";
-import { ScrollView, ActivityIndicator } from "react-native";
+import { ActivityIndicator } from "react-native";
 
-import { FormatedValuableObject } from "../../models/reducers/inventory";
-import { Box, SearchBar } from "../../components";
+import { FormatedValuableObject } from "../../models/Inventory";
+import { Box } from "../../components";
 import { InventoryRoutes, StackNavigationProps } from "../../navigation/types";
+import { useReTheme } from "../../theme";
 
 import Card from "./Card";
 import { useInventoryValuable } from "./useInventoryValuable";
-
-const PLACEHOLDER_TEXT = "Search 4 items";
+import Container from "./Container";
+import SuccessModal from "./SuccessModal";
+import useSuccessModal from "./useSuccessModal";
 
 const Inventory = ({
   navigation,
 }: StackNavigationProps<InventoryRoutes, "Inventory">) => {
+  const theme = useReTheme();
   const {
     inventory,
     isLoading,
     searchQuery,
     setSearchQuery,
   } = useInventoryValuable();
+
+  const { handleSuccessModal, successModalVisible, data } = useSuccessModal();
 
   const onChangeSearch = (query: string) => {
     setSearchQuery(query);
@@ -30,19 +35,7 @@ const Inventory = ({
 
   if (isLoading || inventory === undefined) {
     return (
-      <ScrollView contentContainerStyle={{ flex: 1 }}>
-        <Box
-          paddingHorizontal="ml"
-          paddingTop="s"
-          paddingBottom="ml"
-          backgroundColor="white"
-        >
-          <SearchBar
-            placeholder={PLACEHOLDER_TEXT}
-            onChangeText={onChangeSearch}
-            value={searchQuery}
-          />
-        </Box>
+      <Container searchQuery={searchQuery} onChangeSearch={onChangeSearch}>
         <Box
           paddingTop="ml"
           paddingHorizontal="ml"
@@ -50,26 +43,14 @@ const Inventory = ({
           alignItems="center"
           justifyContent="center"
         >
-          <ActivityIndicator size="small" color="#0000ff" />
+          <ActivityIndicator size="small" color={theme.colors.primary} />
         </Box>
-      </ScrollView>
+      </Container>
     );
   }
 
   return (
-    <ScrollView>
-      <Box
-        paddingHorizontal="ml"
-        paddingTop="ml"
-        paddingBottom="ml"
-        backgroundColor="white"
-      >
-        <SearchBar
-          placeholder={PLACEHOLDER_TEXT}
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
-      </Box>
+    <Container searchQuery={searchQuery} onChangeSearch={onChangeSearch}>
       <Box
         paddingTop="ml"
         paddingHorizontal="ml"
@@ -89,7 +70,13 @@ const Inventory = ({
           </Box>
         ))}
       </Box>
-    </ScrollView>
+      <SuccessModal
+        visible={successModalVisible}
+        onPress={handleSuccessModal}
+        name={data?.name}
+        price={data?.estimation}
+      />
+    </Container>
   );
 };
 

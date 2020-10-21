@@ -12,6 +12,7 @@ const palette = {
   lightPeriwinkle: "#dee0e6",
   redLight: "#CB444A",
   darkPeriwinkle: "#D2D3D8",
+  palePaleGrey: "#eff2f9",
 };
 
 export const theme = {
@@ -32,6 +33,7 @@ export const theme = {
     keyboardBar: palette.lightPeriwinkle,
     keyboardBackground: palette.darkPeriwinkle,
     error: palette.redLight,
+    borderModal: palette.palePaleGrey,
   },
   spacing: {
     xs: 4,
@@ -113,8 +115,8 @@ export const theme = {
     },
     button: {
       fontSize: 16,
-      fontFamily: "SFProDisplay-Heavy",
-      color: "secondary",
+      fontFamily: "SFProDisplay-Semibold",
+      color: "white",
       lineHeight: 24,
     },
   },

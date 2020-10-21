@@ -1,7 +1,7 @@
 import { ParamListBase, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 
-import { FormatedValuableObject } from "../models/reducers/inventory";
+import { FormatedValuableObject } from "../models/Inventory";
 
 export type RootStackParamList = {
   Root: undefined;

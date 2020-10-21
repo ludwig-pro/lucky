@@ -1,6 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
-import inventory from "./inventory";
+import { inventory } from "./Inventory";
 
 const rootReducer = combineReducers({
   inventory,

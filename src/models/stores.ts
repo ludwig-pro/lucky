@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import reactotronConfig from "./reactotron";
-import { rootReducer } from "./reducers";
+import rootReducer from "./rootReducer";
 
 const store = configureStore({
   reducer: rootReducer,

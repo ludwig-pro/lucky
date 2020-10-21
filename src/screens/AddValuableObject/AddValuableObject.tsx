@@ -16,7 +16,7 @@ import {
 } from "../../components";
 import { InventoryRoutes, StackNavigationProps } from "../../navigation/types";
 import { makeStyles, Theme } from "../../theme";
-import { addValuableObject } from "../../models/reducers/inventory";
+import { addValuableObject, Category } from "../../models/Inventory";
 
 import Documents from "./Documents";
 import { convertStringWithCurrencyToNumber, hasError } from "./helpers";
@@ -37,14 +37,28 @@ const initialContractOptions = [
   { value: 4, label: "T_LUKO_HI_4" },
 ];
 
+const initialFormValue = {
+  name: "",
+  description: "",
+  category: "" as Category,
+  contract: "",
+  purchaseDate: "",
+  purchaseValue: "",
+  mainImage: "",
+  documents: {
+    receipt: "",
+    picture: "",
+  },
+};
+
 const ValuableObjectSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   description: Yup.string(),
   category: Yup.mixed()
-    .oneOf(["Art", "Electronics", "Jewelry", "Music Instruments"])
+    .oneOf(["Art", "Electronics", "Jewelry", "Music Instruments"] as Category[])
     .required("Required"),
   contract: Yup.mixed()
-    .oneOf(["T_LUKO_HI_1", "T_LUKO_HI_2", "T_LUKO_HI_3", "Music T_LUKO_HI_4"])
+    .oneOf(["T_LUKO_HI_1", "T_LUKO_HI_2", "T_LUKO_HI_3", "T_LUKO_HI_4"])
     .required("Required"),
   purchaseDate: Yup.date().max(new Date()).required("Required"),
   purchaseValue: Yup.string()
@@ -72,6 +86,26 @@ const AddValuableObject = ({
 }: StackNavigationProps<InventoryRoutes, "Inventory">) => {
   const styles = useStyles();
   const dispatch = useDispatch();
+  const handleOnSubmit = (formValues: typeof initialFormValue) => {
+    const newValuableObject = {
+      id: nanoid(),
+      rank: 0,
+      name: formValues.name,
+      category: formValues.category,
+      purchaseDate: formValues.purchaseDate,
+      purchaseValue: convertStringWithCurrencyToNumber(
+        formValues.purchaseValue
+      ).toString(),
+      mainImage: formValues.mainImage,
+      receipt: formValues.documents.receipt,
+      image: formValues.documents.picture,
+      contractId: formValues.contract,
+      description: formValues.description,
+    };
+
+    dispatch(addValuableObject(newValuableObject));
+    navigation.goBack();
+  };
   const {
     handleChange,
     handleSubmit,
@@ -82,42 +116,10 @@ const AddValuableObject = ({
     values,
     setFieldTouched,
   } = useFormik({
-    initialValues: {
-      name: "",
-      description: "",
-      category: "",
-      contract: "",
-      purchaseDate: "",
-      purchaseValue: "",
-      mainImage: "",
-      documents: {
-        receipt: "",
-        picture: "",
-      },
-    },
+    initialValues: initialFormValue,
     validationSchema: ValuableObjectSchema,
     validateOnMount: true,
-    onSubmit: (formValues) => {
-      const newValuableObject = {
-        id: nanoid(),
-        rank: 0,
-        name: formValues.name,
-        category: formValues.category,
-        purchaseDate: formValues.purchaseDate,
-        purchaseValue: convertStringWithCurrencyToNumber(
-          formValues.purchaseValue
-        ),
-        mainImage: formValues.mainImage,
-        receipt: formValues.documents.receipt,
-        image: formValues.documents.picture,
-        contractId: formValues.contract,
-        description: formValues.description,
-      };
-
-      // TOFIX TYPE => ENUM for category
-      dispatch(addValuableObject(newValuableObject));
-      navigation.goBack();
-    },
+    onSubmit: handleOnSubmit,
   });
 
   return (

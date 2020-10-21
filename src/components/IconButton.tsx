@@ -9,7 +9,10 @@ interface IconButtonProps extends IconProps {
 
 const IconButton = ({ onPress, ...rest }: IconButtonProps) => {
   return (
-    <BorderlessButton onPress={onPress}>
+    <BorderlessButton
+      onPress={onPress}
+      hitSlop={{ vertical: 22, horizontal: 22 }}
+    >
       <Icon {...rest} />
     </BorderlessButton>
   );
