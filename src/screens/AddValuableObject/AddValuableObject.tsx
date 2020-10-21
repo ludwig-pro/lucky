@@ -3,20 +3,35 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-import { Box, Header, DatePicker, TextInput } from "../../components";
+import {
+  Box,
+  Header,
+  DatePicker,
+  TextInput,
+  ImagePicker,
+  Picker,
+  CurrencyTextInput,
+} from "../../components";
 import { InventoryRoutes, StackNavigationProps } from "../../navigation/types";
 import { makeStyles, Theme } from "../../theme";
-import ImagePicker from "../../components/ImagePicker";
 
-import ValuablePicker from "./ValuablePicker";
 import Documents from "./Documents";
+import { convertStringWithCurrencyToNumber, hasError } from "./helpers";
 
-const initialOptions = [
+const initialCategoryOptions = [
   { value: 0, label: "Category" },
   { value: 1, label: "Art" },
   { value: 2, label: "Electronics" },
   { value: 3, label: "Jewelry" },
   { value: 4, label: "Music Instruments" },
+];
+
+const initialContractOptions = [
+  { value: 0, label: "Contract" },
+  { value: 1, label: "T_LUKO_HI_1" },
+  { value: 2, label: "T_LUKO_HI_2" },
+  { value: 3, label: "T_LUKO_HI_3" },
+  { value: 4, label: "T_LUKO_HI_4" },
 ];
 
 const ValuableObjectSchema = Yup.object().shape({
@@ -25,22 +40,29 @@ const ValuableObjectSchema = Yup.object().shape({
   category: Yup.mixed()
     .oneOf(["Art", "Electronics", "Jewelry", "Music Instruments"])
     .required("Required"),
+  contract: Yup.mixed()
+    .oneOf(["T_LUKO_HI_1", "T_LUKO_HI_2", "T_LUKO_HI_3", "Music T_LUKO_HI_4"])
+    .required("Required"),
   purchaseDate: Yup.date().max(new Date()).required("Required"),
+  purchaseValue: Yup.string()
+    .test("isTooMuch", "excessive value", (value) => {
+      if (value === undefined || typeof value !== "string") {
+        return false;
+      }
+      const valueToCompare = convertStringWithCurrencyToNumber(value);
+
+      if (valueToCompare <= 0 || valueToCompare > 40000) {
+        return false;
+      }
+      return true;
+    })
+    .required("Value is required"),
   mainImage: Yup.string().required("Required"),
   documents: Yup.object({
     receipt: Yup.string().required("Required"),
-    picture: Yup.string().required("Required"),
+    picture: Yup.string(),
   }),
 });
-
-export type FormikHandleChange = {
-  (e: React.ChangeEvent<never>): void;
-  <T_1 = string | React.ChangeEvent<never>>(
-    field: T_1
-  ): T_1 extends React.ChangeEvent<never>
-    ? void
-    : (e: string | React.ChangeEvent<never>) => void;
-};
 
 const AddValuableObject = ({
   navigation,
@@ -49,9 +71,10 @@ const AddValuableObject = ({
   const {
     handleChange,
     handleSubmit,
-    // handleBlur,
-    // errors,
-    // touched,
+    handleBlur,
+    errors,
+    touched,
+    isValid,
     values,
     setFieldTouched,
   } = useFormik({
@@ -59,7 +82,9 @@ const AddValuableObject = ({
       name: "",
       description: "",
       category: "",
+      contract: "",
       purchaseDate: "",
+      purchaseValue: "",
       mainImage: "",
       documents: {
         receipt: "",
@@ -67,6 +92,7 @@ const AddValuableObject = ({
       },
     },
     validationSchema: ValuableObjectSchema,
+    validateOnMount: true,
     onSubmit: (formValues) => {
       console.log("FORMIK", JSON.stringify(formValues, null, 2));
     },
@@ -86,7 +112,7 @@ const AddValuableObject = ({
           right={{
             label: "Save",
             onPress: handleSubmit,
-            // disabled: true, // need to be controlled by formik
+            disabled: !isValid,
           }}
           title="New Object"
         />
@@ -94,28 +120,56 @@ const AddValuableObject = ({
           containerStyle={styles.imagePicker}
           image={values.mainImage}
           onImagePick={handleChange("mainImage")}
+          error={hasError(errors.mainImage, touched.mainImage)}
+          setTouched={() => setFieldTouched("mainImage", true, false)}
         />
         <Box paddingHorizontal="ml">
           <TextInput
             value={values.name}
             onChangeText={handleChange("name")}
-            onBlur={() => setFieldTouched("name", true)}
             label="Name"
             placeholder="Name"
             containerStyle={styles.field}
+            onBlur={handleBlur("name")}
+            error={hasError(errors.name, touched.name)}
+            errorLabel={errors.name}
           />
-          <ValuablePicker
+          <Picker
             label="Category"
-            initialOptions={initialOptions}
+            initialOptions={initialCategoryOptions}
             initialValue={0}
             containerStyle={styles.field}
             onChangeItem={handleChange("category")}
+            onBlur={() => setFieldTouched("category", true, false)}
+            error={hasError(errors.category, touched.category)}
+          />
+          <Picker
+            label="Contract"
+            initialOptions={initialContractOptions}
+            initialValue={0}
+            containerStyle={styles.field}
+            onChangeItem={handleChange("contract")}
+            onBlur={() => setFieldTouched("contract", true, false)}
+            error={hasError(errors.contract, touched.contract)}
           />
           <DatePicker
             label="Purchase Date"
             containerStyle={styles.field}
             date={values.purchaseDate}
             onChangeDate={handleChange("purchaseDate")}
+            onBlur={() => setFieldTouched("purchaseDate", true, false)}
+            error={hasError(errors.purchaseDate, touched.purchaseDate)}
+          />
+          <CurrencyTextInput
+            value={values.purchaseValue}
+            onChangeText={handleChange("purchaseValue")}
+            onBlur={() => setFieldTouched("purchaseValue", true, false)}
+            error={hasError(errors.purchaseValue, touched.purchaseValue)}
+            errorLabel={errors.purchaseValue}
+            label="Purchase Value"
+            placeholder="Purchase Value"
+            containerStyle={styles.field}
+            keyboardType="number-pad"
           />
           <TextInput
             value={values.description}
@@ -129,6 +183,9 @@ const AddValuableObject = ({
             label="Documents"
             documents={values.documents}
             onDocumentPick={handleChange}
+            errors={errors.documents}
+            touched={touched.documents}
+            setFieldTouched={setFieldTouched}
           />
         </Box>
       </Box>

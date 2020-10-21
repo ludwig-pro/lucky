@@ -19,6 +19,7 @@ interface DatePickerProps {
   label?: string;
   disabled?: boolean;
   error?: boolean;
+  onBlur: () => void;
   date: string;
   onChangeDate: (e: string) => void;
 }
@@ -30,6 +31,7 @@ const DatePicker = ({
   error,
   onChangeDate,
   date,
+  onBlur,
 }: DatePickerProps) => {
   const theme = useReTheme();
   const [focused, setFocused] = React.useState(false);
@@ -43,10 +45,12 @@ const DatePicker = ({
   const cancelHandler = () => {
     setShow(false);
     onChangeDate("");
+    onBlur();
   };
 
   const hideDatePicker = () => {
     setShow(false);
+    onBlur();
   };
 
   const handleConfirm = (selectedDate: Date) => {
@@ -57,15 +61,18 @@ const DatePicker = ({
   let activeColor;
   let outlineColor;
   let textColor;
+  let placeholderColor;
 
   if (disabled) {
     textColor = theme.colors.placeholder;
     activeColor = theme.colors.placeholder;
     outlineColor = theme.colors.placeholder;
+    placeholderColor = theme.colors.placeholder;
   } else {
-    textColor = theme.colors.dark;
+    textColor = error ? theme.colors.error : theme.colors.dark;
     activeColor = error ? theme.colors.error : theme.colors.primary;
     outlineColor = theme.colors.placeholder;
+    placeholderColor = error ? theme.colors.error : theme.colors.placeholder;
   }
 
   const hasActiveOutline = !disabled && (focused || error);
@@ -88,7 +95,7 @@ const DatePicker = ({
               style={[
                 styles.text,
                 {
-                  color: date ? textColor : theme.colors.placeholder,
+                  color: date ? textColor : placeholderColor,
                 },
               ]}
             >

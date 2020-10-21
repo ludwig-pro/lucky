@@ -14,7 +14,8 @@ import * as ExpoImagePicker from "expo-image-picker";
 
 import { useReTheme } from "../theme";
 
-import { Box, Icon, Text } from ".";
+import { Box, Text } from "./Themed";
+import Icon from "./Icon";
 
 interface ImagePickerProps {
   containerStyle?: StyleProp<ViewStyle>;
@@ -22,6 +23,8 @@ interface ImagePickerProps {
   label?: string;
   image: string | undefined;
   onImagePick: (URI: string) => void;
+  error?: boolean;
+  setTouched?: () => void;
 }
 
 const ImagePicker = ({
@@ -30,9 +33,10 @@ const ImagePicker = ({
   label = "Add Photo",
   image,
   onImagePick,
+  error,
+  setTouched,
 }: ImagePickerProps) => {
   const theme = useReTheme();
-
   React.useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
@@ -64,6 +68,8 @@ const ImagePicker = ({
       const imageURI = result.uri;
       onImagePick(imageURI);
     }
+    // 🕵🏻‍♂️ need to wait ?
+    setTouched && setTouched();
   };
 
   const pickCameraRoll = async () => {
@@ -78,6 +84,8 @@ const ImagePicker = ({
       const imageURI = result.uri;
       onImagePick(imageURI);
     }
+    // 🕵🏻‍♂️ need to wait ?
+    setTouched && setTouched();
   };
 
   const onPress = () =>
@@ -88,7 +96,7 @@ const ImagePicker = ({
       },
       async (buttonIndex) => {
         if (buttonIndex === 0) {
-          // cancel action
+          setTouched && setTouched();
         } else if (buttonIndex === 1) {
           await pickCamera();
         } else if (buttonIndex === 2) {
@@ -110,7 +118,7 @@ const ImagePicker = ({
             justifyContent="center"
             borderStyle={image ? "solid" : "dashed"}
             borderWidth={image ? StyleSheet.hairlineWidth : 2}
-            borderColor="dash"
+            borderColor={error ? "error" : "dash"}
             overflow="hidden"
           >
             {image ? (

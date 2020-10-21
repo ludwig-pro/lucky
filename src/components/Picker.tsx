@@ -2,10 +2,12 @@ import * as React from "react";
 import { StyleProp, ViewStyle, View } from "react-native";
 import SelectInput from "react-native-select-input-ios";
 
-import { Box, WithLabel } from "../../components";
-import { makeStyles, Theme, useReTheme } from "../../theme";
+import { makeStyles, Theme, useReTheme } from "../theme";
 
-interface ValuablePickerProps {
+import { Box } from "./Themed";
+import WithLabel from "./WithLabel";
+
+interface PickerProps {
   containerStyle?: StyleProp<ViewStyle>;
   disabled?: boolean;
   error?: boolean;
@@ -13,17 +15,19 @@ interface ValuablePickerProps {
   initialOptions: { value: number; label: string }[];
   initialValue: number;
   onChangeItem: (item: string) => void;
+  onBlur: () => void;
 }
 
-const ValuablePicker = ({
+const Picker = ({
   initialOptions,
   initialValue = 0,
   disabled = false,
-  error = false,
   onChangeItem,
   label,
   containerStyle,
-}: ValuablePickerProps) => {
+  onBlur,
+  error,
+}: PickerProps) => {
   const theme = useReTheme();
   const styles = useStyles();
   const [value, setValue] = React.useState(initialValue);
@@ -40,7 +44,12 @@ const ValuablePicker = ({
   } else {
     activeColor = error ? theme.colors.error : theme.colors.primary;
     outlineColor = theme.colors.placeholder;
-    labelColor = value === 0 ? theme.colors.placeholder : theme.colors.dark;
+    // eslint-disable-next-line no-nested-ternary
+    labelColor = error
+      ? theme.colors.error
+      : value === 0
+      ? theme.colors.placeholder
+      : theme.colors.dark;
   }
 
   const hasActiveOutline = !disabled && (focused || error);
@@ -77,11 +86,13 @@ const ValuablePicker = ({
             setFocused(false);
             onChangeItem(initialOptions[0].label);
             setValue(0);
+            onBlur();
           }}
           onSubmitEditing={(itemValue: number) => {
             setValue(itemValue);
             onChangeItem(initialOptions[itemValue].label);
             setFocused(false);
+            onBlur();
           }}
         />
       </Box>
@@ -89,7 +100,7 @@ const ValuablePicker = ({
   );
 };
 
-export default React.memo(ValuablePicker);
+export default React.memo(Picker);
 
 const useStyles = makeStyles((theme: Theme) => ({
   buttonsViewStyle: {

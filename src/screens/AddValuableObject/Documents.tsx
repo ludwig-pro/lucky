@@ -1,11 +1,19 @@
 import * as React from "react";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 
-import { Box, Text } from "../../components";
+import { Box, Text, ImagePicker } from "../../components";
 import { useReTheme } from "../../theme";
-import ImagePicker from "../../components/ImagePicker";
 
-import { FormikHandleChange } from "./AddValuableObject";
+import { hasError } from "./helpers";
+
+type FormikHandleChange = {
+  (e: React.ChangeEvent<never>): void;
+  <T_1 = string | React.ChangeEvent<never>>(
+    field: T_1
+  ): T_1 extends React.ChangeEvent<never>
+    ? void
+    : (e: string | React.ChangeEvent<never>) => void;
+};
 
 interface DocumentsProps {
   containerStyle?: StyleProp<ViewStyle>;
@@ -15,6 +23,19 @@ interface DocumentsProps {
     picture?: string;
   };
   onDocumentPick: FormikHandleChange;
+  errors?: {
+    receipt?: string;
+    picture?: string;
+  };
+  touched?: {
+    receipt?: boolean;
+    picture?: boolean;
+  };
+  setFieldTouched: (
+    field: string,
+    touched?: boolean | undefined,
+    shouldValidate?: boolean | undefined
+  ) => void;
 }
 
 const Documents = ({
@@ -22,6 +43,9 @@ const Documents = ({
   label,
   documents,
   onDocumentPick,
+  errors,
+  touched,
+  setFieldTouched,
 }: DocumentsProps) => {
   const theme = useReTheme();
 
@@ -39,11 +63,15 @@ const Documents = ({
           label="Add Receipt"
           image={documents?.receipt}
           onImagePick={onDocumentPick("documents.receipt")}
+          error={hasError(errors?.receipt, touched?.receipt)}
+          setTouched={() => setFieldTouched("documents.receipt", true, false)}
         />
         <ImagePicker
           label="Add Photos"
           image={documents?.picture}
           onImagePick={onDocumentPick("documents.picture")}
+          error={hasError(errors?.picture, touched?.picture)}
+          setTouched={() => setFieldTouched("documents.picture", true, false)}
         />
       </Box>
     </Box>

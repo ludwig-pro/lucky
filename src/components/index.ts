@@ -7,3 +7,6 @@ export { default as Header } from "./Header";
 export { default as DatePicker } from "./DatePicker";
 export { default as TextInput } from "./TextInput";
 export { default as WithLabel } from "./WithLabel";
+export { default as ImagePicker } from "./ImagePicker";
+export { default as Picker } from "./Picker";
+export { default as CurrencyTextInput } from "./CurrencyTextInput";

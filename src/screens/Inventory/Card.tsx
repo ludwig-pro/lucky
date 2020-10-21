@@ -3,7 +3,7 @@ import { StyleSheet, View, Image, ImageRequireSource } from "react-native";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import { makeStyles, Theme } from "../../theme";
-import { Box, Text } from "../../components/Themed";
+import { Box, Text } from "../../components";
 
 interface CardProps {
   id: number;

@@ -6,13 +6,22 @@ import {
   StyleProp,
   TextStyle,
   ViewStyle,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
 } from "react-native";
+import { TextInputMask } from "react-native-masked-text";
 
 import { Theme, useReTheme } from "../theme";
 
-import WithLabel from "./WithLabel";
-import { Box } from "./Themed";
-import { Event } from "./types";
+import { Box, WithLabel } from ".";
+
+const CONFIG = {
+  precision: 0,
+  separator: " ",
+  delimiter: " ",
+  unit: "",
+  suffixUnit: "€",
+};
 
 type TextInputProps = React.ComponentProps<typeof NativeTextInput> & {
   disabled?: boolean;
@@ -26,9 +35,11 @@ type TextInputProps = React.ComponentProps<typeof NativeTextInput> & {
   containerStyle?: StyleProp<ViewStyle>;
   picker?: boolean;
   onFocus?: () => void;
-  onBlur?: (e: Event) => void;
+  onBlur?: () => void;
   errorLabel?: string;
 };
+
+type Event = NativeSyntheticEvent<TextInputFocusEventData>;
 
 export const TextInput: FC<TextInputProps> = ({
   disabled = false,
@@ -44,13 +55,12 @@ export const TextInput: FC<TextInputProps> = ({
   style,
   containerStyle,
   label,
-  errorLabel,
   ...rest
 }) => {
   const theme = useReTheme();
   const [focused, setFocused] = React.useState(false);
   const [text, setText] = React.useState(value);
-  const height = 48;
+  const textInputRef = React.useRef<TextInputMask>(null);
 
   const handleFocus = (e: Event) => {
     if (disabled || !editable) {
@@ -76,7 +86,6 @@ export const TextInput: FC<TextInputProps> = ({
     if (disabled || !editable) {
       return;
     }
-
     setText(newValue);
     if (onChangeText) {
       onChangeText(newValue);
@@ -98,7 +107,7 @@ export const TextInput: FC<TextInputProps> = ({
     placeholderTextColor = theme.colors.placeholder;
     outlineColor = theme.colors.placeholder;
   } else {
-    textColor = theme.colors.dark;
+    textColor = error ? theme.colors.error : theme.colors.dark;
     activeColor = error ? theme.colors.error : theme.colors.primary;
     backgroundColor = theme.colors.white;
     placeholderTextColor = error
@@ -117,8 +126,6 @@ export const TextInput: FC<TextInputProps> = ({
     borderBottomWidth: hasActiveOutline ? 2 : 1,
   };
 
-  const displayedPlaceholder = error ? errorLabel : placeholder;
-
   return (
     <WithLabel
       label={label}
@@ -127,20 +134,19 @@ export const TextInput: FC<TextInputProps> = ({
     >
       <Box>
         <View style={[styles.outline, outlineStyle]} pointerEvents="none" />
-        <NativeTextInput
-          placeholder={displayedPlaceholder}
+        <TextInputMask
+          ref={textInputRef}
+          placeholder={focused ? "" : placeholder}
           style={[
             styles.input,
             styles.textInput,
             textStyle,
             !multiline
-              ? { height }
+              ? { height: 48 }
               : { height: 50 + 16 * numberOfLines, paddingVertical: 6 },
 
             style,
           ]}
-          value={text}
-          onChangeText={handleChangeText}
           placeholderTextColor={placeholderTextColor}
           onFocus={handleFocus}
           onBlur={handleBlur}
@@ -148,6 +154,11 @@ export const TextInput: FC<TextInputProps> = ({
           multiline={multiline}
           numberOfLines={numberOfLines}
           {...rest}
+          type={"money"}
+          options={CONFIG}
+          value={text}
+          onChangeText={handleChangeText}
+          caretHidden
         />
       </Box>
     </WithLabel>
@@ -160,6 +171,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     zIndex: 1,
     paddingBottom: 1,
+    height: 48,
   },
   textInput: {
     fontFamily: "SFProDisplay-Regular",
