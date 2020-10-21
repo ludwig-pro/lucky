@@ -15,6 +15,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { useClock, useValues } from "react-native-redash";
 
+import { Box, Text } from "./Themed";
+
 const duration = 200;
 const runAnimation = proc(
   (
@@ -35,8 +37,6 @@ const runAnimation = proc(
       ]),
     ])
 );
-
-import { Box, Text } from ".";
 
 export interface WithLabelProps {
   label?: string;

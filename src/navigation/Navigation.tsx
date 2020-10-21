@@ -2,7 +2,7 @@ import * as React from "react";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 
 import fonts from "../theme/fonts";
-import { assets as InventoryAssets } from "../screens/Inventory";
+import { assets as InventoryAssets } from "../services/fixtures";
 
 import LoadAssets from "./LoadAssets";
 import BottomTabNavigator from "./BottomTabNavigator";
@@ -24,11 +24,6 @@ export const RootNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Root" component={BottomTabNavigator} />
-      {/* <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      /> */}
     </Stack.Navigator>
   );
 };

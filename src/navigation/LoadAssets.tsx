@@ -10,6 +10,7 @@ import { StatusBar } from "expo-status-bar";
 const NAVIGATION_STATE_KEY = `NAVIGATION_STATE_KEY-${Constants.manifest.sdkVersion}`;
 
 export type FontSource = Parameters<typeof Font.loadAsync>[0];
+
 const usePromiseAll = (promises: Promise<void | Asset[]>[], cb: () => void) =>
   useEffect(() => {
     (async () => {
@@ -56,11 +57,13 @@ const LoadAssets = ({ assets, fonts, children }: LoadAssetsProps) => {
       restoreState();
     }
   }, [isNavigationReady]);
+
   const onStateChange = useCallback(
     (state) =>
       AsyncStorage.setItem(NAVIGATION_STATE_KEY, JSON.stringify(state)),
     []
   );
+
   if (!ready || !isNavigationReady) {
     return <AppLoading />;
   }

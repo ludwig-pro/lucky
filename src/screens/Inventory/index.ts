@@ -1,1 +1,1 @@
-export { default as Inventory, assets } from "./Inventory";
+export { default as Inventory } from "./Inventory";

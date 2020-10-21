@@ -1,7 +1,7 @@
 import { ParamListBase, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 
-import { ValuableProduct } from "../screens/Inventory/types";
+import { FormatedValuableObject } from "../models/reducers/inventory";
 
 export type RootStackParamList = {
   Root: undefined;
@@ -55,7 +55,7 @@ export interface StackNavigationProps<
 
 export type InventoryRoutes = {
   Inventory: undefined;
-  ValuableDetails: { valuableId: ValuableProduct["id"] };
+  ValuableDetails: { valuableObject: FormatedValuableObject };
   Document: { documentId: number };
   AddValuableObject: undefined;
 };

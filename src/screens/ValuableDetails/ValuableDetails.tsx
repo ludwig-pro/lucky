@@ -10,32 +10,12 @@ import { useReTheme } from "../../theme";
 import Documents from "./Documents";
 import Section from "./Section";
 
-const CARTIER_RING = {
-  id: 1,
-  rank: 1,
-  name: "Cartier Ring",
-  type: "Jewelry",
-  source: require("../../../assets/cartier_ring.png"),
-  information: {
-    category: "Jewelry",
-    purchaseDate: "01/01/2019",
-    endWarranty: "01/01/2020",
-  },
-  price: {
-    estimation: "4890 - 5150",
-    purchasePrice: "5780",
-  },
-  documents: [
-    { id: 1, rank: 1, source: require("../../../assets/fake_bill.jpg") },
-    { id: 2, rank: 2, source: require("../../../assets/cartier_ring.png") },
-  ],
-};
-
 const ValuableDetails = ({
   navigation: { goBack, navigate },
+  route,
 }: StackNavigationProps<InventoryRoutes, "ValuableDetails">) => {
   const theme = useReTheme();
-
+  const { valuableObject } = route.params;
   const navigateToDocument = (id: number) =>
     navigate("Document", { documentId: id });
 
@@ -44,7 +24,7 @@ const ValuableDetails = ({
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box height={375} width={375} backgroundColor="primary">
           <Image
-            source={CARTIER_RING.source}
+            source={valuableObject.mainImage}
             style={{
               ...StyleSheet.absoluteFillObject,
               width: undefined,
@@ -54,27 +34,24 @@ const ValuableDetails = ({
         </Box>
         <Box padding="ml">
           <Text variant="label2" paddingBottom="s">
-            {CARTIER_RING.type.toUpperCase()}
+            {valuableObject.category.toUpperCase()}
           </Text>
           <Box
             flexDirection="row"
             justifyContent="space-between"
             alignItems="center"
           >
-            <Text variant="title1">{CARTIER_RING.name}</Text>
+            <Text variant="title1">{valuableObject.name}</Text>
             <Feather name="edit" size={24} color={theme.colors.primary} />
           </Box>
           <Section
             title="Information"
-            sectionData={Object.entries(CARTIER_RING.information)}
+            sectionData={valuableObject.information}
           />
-          <Section
-            title="Price"
-            sectionData={Object.entries(CARTIER_RING.price)}
-          />
+          <Section title="Price" sectionData={valuableObject.price} />
           <Documents
             title="Documents"
-            documents={CARTIER_RING.documents}
+            documents={valuableObject.documents}
             onPress={navigateToDocument}
           />
         </Box>

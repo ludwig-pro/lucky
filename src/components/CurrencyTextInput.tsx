@@ -13,7 +13,8 @@ import { TextInputMask } from "react-native-masked-text";
 
 import { Theme, useReTheme } from "../theme";
 
-import { Box, WithLabel } from ".";
+import { Box } from "./Themed";
+import WithLabel from "./WithLabel";
 
 const CONFIG = {
   precision: 0,

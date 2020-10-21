@@ -6,18 +6,17 @@ import { makeStyles, Theme } from "../../theme";
 import { Box, Text } from "../../components";
 
 interface CardProps {
-  id: number;
   title: string;
-  price: number;
+  price: string;
   source: ImageRequireSource;
-  onPress: (id: number) => void;
+  onPress: () => void;
 }
 
-const Card = ({ id, title, price, source, onPress }: CardProps) => {
+const Card = ({ title, price, source, onPress }: CardProps) => {
   const styles = useStyles();
   return (
     <View style={styles.container}>
-      <BorderlessButton onPress={() => onPress(id)}>
+      <BorderlessButton onPress={() => onPress()}>
         <Box
           height={262}
           width={157}
