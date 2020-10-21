@@ -1,11 +1,9 @@
 import * as React from "react";
-import { StyleSheet, StyleProp, ViewStyle, View } from "react-native";
+import { StyleProp, ViewStyle, View } from "react-native";
 import SelectInput from "react-native-select-input-ios";
-import { Value } from "react-native-reanimated";
 
 import { Box, WithLabel } from "../../components";
-import { useReTheme } from "../../theme";
-import useReanimatedOpacity from "../../hooks/useReanimatedOpacity";
+import { makeStyles, Theme, useReTheme } from "../../theme";
 
 interface ValuablePickerProps {
   containerStyle?: StyleProp<ViewStyle>;
@@ -27,37 +25,22 @@ const ValuablePicker = ({
   containerStyle,
 }: ValuablePickerProps) => {
   const theme = useReTheme();
+  const styles = useStyles();
   const [value, setValue] = React.useState(initialValue);
   const [focused, setFocused] = React.useState(false);
-  const [show, setShow] = React.useState(false);
-  const { startAnimation, opacity } = useReanimatedOpacity();
-
-  const startValue = (1 as unknown) as Value<1>;
-
-  React.useEffect(() => {
-    if (value !== 0 && show === false) {
-      console.log("appear");
-      startAnimation.setValue(startValue);
-      setShow(true);
-    }
-    if (value === 0 && show === true) {
-      console.log("deappear");
-
-      startAnimation.setValue(startValue);
-      setShow(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
 
   let activeColor;
   let outlineColor;
+  let labelColor;
 
   if (disabled) {
     activeColor = theme.colors.placeholder;
     outlineColor = theme.colors.placeholder;
+    labelColor = theme.colors.placeholder;
   } else {
     activeColor = error ? theme.colors.error : theme.colors.primary;
     outlineColor = theme.colors.placeholder;
+    labelColor = value === 0 ? theme.colors.placeholder : theme.colors.dark;
   }
 
   const hasActiveOutline = !disabled && (focused || error);
@@ -68,30 +51,21 @@ const ValuablePicker = ({
   };
 
   return (
-    <WithLabel label={label} containerStyle={containerStyle} opacity={opacity}>
+    <WithLabel
+      label={label}
+      containerStyle={containerStyle}
+      show={value !== 0 || focused}
+    >
       <Box>
         <View style={[styles.outline, outlineStyle]} pointerEvents="none" />
         <SelectInput
           value={value}
           options={initialOptions}
           style={styles.inputContainer}
-          buttonsTextStyle={{ fontSize: 16, fontFamily: "SFProDisplay-Medium" }}
-          buttonsViewStyle={{
-            paddingHorizontal: theme.spacing.sm,
-            height: 48,
-            alignItems: "center",
-            backgroundColor: theme.colors.keyboardBar,
-          }}
-          labelStyle={{
-            textAlign: "left",
-            color: value === 0 ? theme.colors.placeholder : theme.colors.dark,
-            fontFamily: "SFProDisplay-Regular",
-            fontSize: 16,
-            lineHeight: 24,
-          }}
-          pickerViewStyle={{
-            backgroundColor: theme.colors.keyboardBackground,
-          }}
+          buttonsTextStyle={styles.buttonsTextStyle}
+          buttonsViewStyle={styles.buttonsViewStyle}
+          labelStyle={[styles.labelStyle, { color: labelColor }]}
+          pickerViewStyle={styles.pickerViewStyle}
           onValueChange={(itemValue: number) => {
             setValue(itemValue);
             onChangeItem(initialOptions[itemValue].label);
@@ -115,9 +89,15 @@ const ValuablePicker = ({
   );
 };
 
-export default ValuablePicker;
+export default React.memo(ValuablePicker);
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((theme: Theme) => ({
+  buttonsViewStyle: {
+    paddingHorizontal: theme.spacing.sm,
+    height: 48,
+    alignItems: "center",
+    backgroundColor: theme.colors.keyboardBar,
+  },
   inputContainer: {
     height: 48,
     justifyContent: "center",
@@ -130,4 +110,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 9999,
   },
-});
+  labelStyle: {
+    textAlign: "left",
+    fontFamily: "SFProDisplay-Regular",
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  pickerViewStyle: {
+    backgroundColor: theme.colors.keyboardBackground,
+  },
+  buttonsTextStyle: { fontSize: 16, fontFamily: "SFProDisplay-Medium" },
+}));

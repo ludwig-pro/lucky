@@ -6,15 +6,14 @@ import {
   StyleProp,
   TextStyle,
   ViewStyle,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
 } from "react-native";
-import { Value } from "react-native-reanimated";
 
 import { Theme, useReTheme } from "../theme";
-import useReanimatedOpacity from "../hooks/useReanimatedOpacity";
 
 import WithLabel from "./WithLabel";
-
-import { Box } from ".";
+import { Box } from "./Themed";
 
 type TextInputProps = React.ComponentProps<typeof NativeTextInput> & {
   disabled?: boolean;
@@ -27,13 +26,16 @@ type TextInputProps = React.ComponentProps<typeof NativeTextInput> & {
   style?: StyleProp<TextStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   picker?: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  errorLabel?: string;
   // should i keep this props ?
   editable?: boolean;
   multiline?: boolean;
   numberOfLines?: number;
-  onFocus?: (args: unknown) => void;
-  onBlur?: (args: unknown) => void;
 };
+
+type Event = NativeSyntheticEvent<TextInputFocusEventData>;
 
 export const TextInput: FC<TextInputProps> = ({
   disabled = false,
@@ -54,29 +56,25 @@ export const TextInput: FC<TextInputProps> = ({
   const theme = useReTheme();
   const [focused, setFocused] = React.useState(false);
   const [text, setText] = React.useState(value);
-  const { startAnimation, opacity } = useReanimatedOpacity();
   const height = 48;
-  const startValue = (1 as unknown) as Value<1>;
 
-  const handleFocus = (args: unknown) => {
+  const handleFocus = (e: Event) => {
     if (disabled || !editable) {
       return;
     }
     setFocused(true);
-    text.length < 1 && startAnimation.setValue(startValue);
     if (onFocus) {
-      onFocus(args);
+      onFocus(e);
     }
   };
 
-  const handleBlur = (args: unknown) => {
+  const handleBlur = (e: Event) => {
     if (disabled || !editable) {
       return;
     }
     setFocused(false);
-    text.length < 1 && startAnimation.setValue(startValue);
     if (onBlur) {
-      onBlur(args);
+      onBlur(e);
     }
   };
 
@@ -109,7 +107,9 @@ export const TextInput: FC<TextInputProps> = ({
     textColor = theme.colors.dark;
     activeColor = error ? theme.colors.error : theme.colors.primary;
     backgroundColor = theme.colors.white;
-    placeholderTextColor = theme.colors.placeholder;
+    placeholderTextColor = error
+      ? theme.colors.error
+      : theme.colors.placeholder;
     outlineColor = theme.colors.placeholder;
   }
 
@@ -124,7 +124,11 @@ export const TextInput: FC<TextInputProps> = ({
   };
 
   return (
-    <WithLabel label={label} containerStyle={containerStyle} opacity={opacity}>
+    <WithLabel
+      label={label}
+      containerStyle={containerStyle}
+      show={text.length > 1 || focused}
+    >
       <Box>
         <View style={[styles.outline, outlineStyle]} pointerEvents="none" />
         <NativeTextInput

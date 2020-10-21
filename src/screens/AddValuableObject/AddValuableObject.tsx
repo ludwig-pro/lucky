@@ -1,9 +1,11 @@
 import * as React from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 import { Box, Header, DatePicker, TextInput } from "../../components";
 import { InventoryRoutes, StackNavigationProps } from "../../navigation/types";
-import { theme } from "../../theme";
+import { makeStyles, Theme } from "../../theme";
 import ImagePicker from "../../components/ImagePicker";
 
 import ValuablePicker from "./ValuablePicker";
@@ -17,24 +19,62 @@ const initialOptions = [
   { value: 4, label: "Music Instruments" },
 ];
 
-type DocumentsType = {
-  receipt?: string;
-  picture?: string;
+const ValuableObjectSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required"),
+  description: Yup.string(),
+  category: Yup.mixed()
+    .oneOf(["Art", "Electronics", "Jewelry", "Music Instruments"])
+    .required("Required"),
+  purchaseDate: Yup.date().max(new Date()).required("Required"),
+  mainImage: Yup.string().required("Required"),
+  documents: Yup.object({
+    receipt: Yup.string().required("Required"),
+    picture: Yup.string().required("Required"),
+  }),
+});
+
+export type FormikHandleChange = {
+  (e: React.ChangeEvent<never>): void;
+  <T_1 = string | React.ChangeEvent<never>>(
+    field: T_1
+  ): T_1 extends React.ChangeEvent<never>
+    ? void
+    : (e: string | React.ChangeEvent<never>) => void;
 };
 
 const AddValuableObject = ({
   navigation,
 }: StackNavigationProps<InventoryRoutes, "Inventory">) => {
-  const [name, setName] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [_, setCategory] = React.useState("");
-  const [date, setDate] = React.useState<string | undefined>();
-  const [mainImage, setMainImage] = React.useState<string | undefined>();
-  const [documents, setDocuments] = React.useState<DocumentsType | undefined>();
+  const styles = useStyles();
+  const {
+    handleChange,
+    handleSubmit,
+    // handleBlur,
+    // errors,
+    // touched,
+    values,
+    setFieldTouched,
+  } = useFormik({
+    initialValues: {
+      name: "",
+      description: "",
+      category: "",
+      purchaseDate: "",
+      mainImage: "",
+      documents: {
+        receipt: "",
+        picture: "",
+      },
+    },
+    validationSchema: ValuableObjectSchema,
+    onSubmit: (formValues) => {
+      console.log("FORMIK", JSON.stringify(formValues, null, 2));
+    },
+  });
 
   return (
     <KeyboardAwareScrollView
-      contentContainerStyle={{ paddingBottom: 40 }}
+      contentContainerStyle={styles.container}
       scrollEnabled={true}
     >
       <Box flex={1} backgroundColor="white">
@@ -45,56 +85,50 @@ const AddValuableObject = ({
           }}
           right={{
             label: "Save",
-            onPress: () => true,
-            disabled: true,
+            onPress: handleSubmit,
+            // disabled: true, // need to be controlled by formik
           }}
           title="New Object"
         />
         <ImagePicker
-          containerStyle={{
-            paddingHorizontal: theme.spacing.ml,
-            paddingVertical: theme.spacing.ml,
-          }}
-          image={mainImage}
-          onImagePick={(imageURI: string) => setMainImage(imageURI)}
+          containerStyle={styles.imagePicker}
+          image={values.mainImage}
+          onImagePick={handleChange("mainImage")}
         />
         <Box paddingHorizontal="ml">
           <TextInput
-            value={name}
+            value={values.name}
+            onChangeText={handleChange("name")}
+            onBlur={() => setFieldTouched("name", true)}
             label="Name"
             placeholder="Name"
-            onChangeText={(text) => setName(text)}
-            containerStyle={{ marginBottom: theme.spacing.ml }}
+            containerStyle={styles.field}
           />
           <ValuablePicker
             label="Category"
             initialOptions={initialOptions}
             initialValue={0}
-            containerStyle={{ marginBottom: theme.spacing.ml }}
-            onChangeItem={setCategory}
+            containerStyle={styles.field}
+            onChangeItem={handleChange("category")}
           />
           <DatePicker
             label="Purchase Date"
-            containerStyle={{ marginBottom: theme.spacing.ml }}
-            date={date}
-            onChangeDate={(newDate: string | undefined) => setDate(newDate)}
+            containerStyle={styles.field}
+            date={values.purchaseDate}
+            onChangeDate={handleChange("purchaseDate")}
           />
           <TextInput
-            value={description}
+            value={values.description}
+            onChangeText={handleChange("description")}
             label="Description"
             placeholder="Description(optional)"
-            onChangeText={(text) => setDescription(text)}
-            containerStyle={{ marginBottom: theme.spacing.ml }}
+            containerStyle={styles.field}
             numberOfLines={1}
           />
           <Documents
             label="Documents"
-            documents={documents}
-            onDocumentPick={(type) => (documentURI) =>
-              setDocuments((prevDocuments?: DocumentsType) => ({
-                [type]: documentURI,
-                ...prevDocuments,
-              }))}
+            documents={values.documents}
+            onDocumentPick={handleChange}
           />
         </Box>
       </Box>
@@ -102,4 +136,14 @@ const AddValuableObject = ({
   );
 };
 
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    paddingBottom: theme.spacing.xl,
+  },
+  field: { marginBottom: theme.spacing.ml },
+  imagePicker: {
+    paddingHorizontal: theme.spacing.ml,
+    paddingVertical: theme.spacing.ml,
+  },
+}));
 export default AddValuableObject;

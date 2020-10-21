@@ -10,19 +10,17 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from "date-fns";
 
 import { useReTheme } from "../theme";
-import useReanimatedOpacity from "../hooks/useReanimatedOpacity";
 
 import WithLabel from "./WithLabel";
-
-import { Text, Box } from ".";
+import { Text, Box } from "./Themed";
 
 interface DatePickerProps {
   containerStyle?: StyleProp<ViewStyle>;
   label?: string;
   disabled?: boolean;
   error?: boolean;
-  date?: string;
-  onChangeDate: (newDate: string | undefined) => void;
+  date: string;
+  onChangeDate: (e: string) => void;
 }
 
 const DatePicker = ({
@@ -34,11 +32,8 @@ const DatePicker = ({
   date,
 }: DatePickerProps) => {
   const theme = useReTheme();
-  const { startAnimation, opacity } = useReanimatedOpacity();
   const [focused, setFocused] = React.useState(false);
-  const [showLabel, setShowLabel] = React.useState(false);
   const [show, setShow] = React.useState(false);
-  const startValue = (1 as unknown) as typeof startAnimation;
 
   const displayPicker = () => {
     setShow(true);
@@ -47,28 +42,15 @@ const DatePicker = ({
 
   const cancelHandler = () => {
     setShow(false);
-    onChangeDate(undefined);
+    onChangeDate("");
   };
 
   const hideDatePicker = () => {
     setShow(false);
   };
 
-  // STYLE
-  React.useEffect(() => {
-    if (date && showLabel === false) {
-      startAnimation.setValue(startValue);
-      setShowLabel(true);
-    }
-    if (date && showLabel === true) {
-      startAnimation.setValue(startValue);
-      setShowLabel(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date]);
-
   const handleConfirm = (selectedDate: Date) => {
-    onChangeDate(format(new Date(selectedDate), "MM/dd/yyyy"));
+    onChangeDate(selectedDate.toISOString());
     hideDatePicker();
   };
 
@@ -92,22 +74,25 @@ const DatePicker = ({
     borderColor: hasActiveOutline ? activeColor : outlineColor,
     borderBottomWidth: hasActiveOutline ? 2 : 1,
   };
-
   return (
-    <WithLabel label={label} containerStyle={containerStyle} opacity={opacity}>
+    <WithLabel
+      label={label}
+      containerStyle={containerStyle}
+      show={date.length > 1 || focused}
+    >
       <Box>
         <View style={[styles.outline, outlineStyle]} pointerEvents="none" />
         <TouchableWithoutFeedback onPress={displayPicker}>
-          <Box style={{ height: 48, justifyContent: "center" }}>
+          <Box style={styles.displayBox}>
             <Text
-              style={{
-                fontFamily: "SFProDisplay-Regular",
-                fontSize: 16,
-                lineHeight: 24,
-                color: date ? textColor : theme.colors.placeholder,
-              }}
+              style={[
+                styles.text,
+                {
+                  color: date ? textColor : theme.colors.placeholder,
+                },
+              ]}
             >
-              {date || label}
+              {date.length > 0 ? format(new Date(date), "dd/MM/yyyy") : label}
             </Text>
           </Box>
         </TouchableWithoutFeedback>
@@ -137,4 +122,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 9999,
   },
+  displayBox: { height: 48, justifyContent: "center" },
+  text: { fontFamily: "SFProDisplay-Regular", fontSize: 16, lineHeight: 24 },
 });
