@@ -56,6 +56,6 @@ export interface StackNavigationProps<
 export type InventoryRoutes = {
   Inventory: undefined;
   ValuableDetails: { valuableObject: FormatedValuableObject };
-  Document: { documentId: number };
+  Document: { source: string };
   AddValuableObject: undefined;
 };

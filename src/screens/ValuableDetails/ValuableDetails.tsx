@@ -16,15 +16,15 @@ const ValuableDetails = ({
 }: StackNavigationProps<InventoryRoutes, "ValuableDetails">) => {
   const theme = useReTheme();
   const { valuableObject } = route.params;
-  const navigateToDocument = (id: number) =>
-    navigate("Document", { documentId: id });
+  const navigateToDocument = (source: string) =>
+    navigate("Document", { source });
 
   return (
     <ModalContainer goBack={goBack}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box height={375} width={375} backgroundColor="primary">
           <Image
-            source={valuableObject.mainImage}
+            source={{ uri: valuableObject.mainImage }}
             style={{
               ...StyleSheet.absoluteFillObject,
               width: undefined,

@@ -1,7 +1,9 @@
 import * as React from "react";
+import { useDispatch } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { nanoid } from "@reduxjs/toolkit";
 
 import {
   Box,
@@ -14,6 +16,7 @@ import {
 } from "../../components";
 import { InventoryRoutes, StackNavigationProps } from "../../navigation/types";
 import { makeStyles, Theme } from "../../theme";
+import { addValuableObject } from "../../models/reducers/inventory";
 
 import Documents from "./Documents";
 import { convertStringWithCurrencyToNumber, hasError } from "./helpers";
@@ -68,6 +71,7 @@ const AddValuableObject = ({
   navigation,
 }: StackNavigationProps<InventoryRoutes, "Inventory">) => {
   const styles = useStyles();
+  const dispatch = useDispatch();
   const {
     handleChange,
     handleSubmit,
@@ -94,7 +98,25 @@ const AddValuableObject = ({
     validationSchema: ValuableObjectSchema,
     validateOnMount: true,
     onSubmit: (formValues) => {
-      console.log("FORMIK", JSON.stringify(formValues, null, 2));
+      const newValuableObject = {
+        id: nanoid(),
+        rank: 0,
+        name: formValues.name,
+        category: formValues.category,
+        purchaseDate: formValues.purchaseDate,
+        purchaseValue: convertStringWithCurrencyToNumber(
+          formValues.purchaseValue
+        ),
+        mainImage: formValues.mainImage,
+        receipt: formValues.documents.receipt,
+        image: formValues.documents.picture,
+        contractId: formValues.contract,
+        description: formValues.description,
+      };
+
+      // TOFIX TYPE => ENUM for category
+      dispatch(addValuableObject(newValuableObject));
+      navigation.goBack();
     },
   });
 

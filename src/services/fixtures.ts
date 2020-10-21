@@ -1,6 +1,6 @@
 import { nanoid } from "@reduxjs/toolkit";
+import { Image } from "react-native";
 
-// import { assets } from "../screens/Inventory"
 import { ValuableObject } from "../models/reducers/inventory";
 
 export const assets = [
@@ -18,10 +18,10 @@ export const FAKE_DATA_INVENTORY: ValuableObject[] = [
     category: "Jewelry",
     purchaseDate: new Date("11/25/1989").toISOString(),
     purchaseValue: "2500",
-    mainImage: assets[0],
+    mainImage: Image.resolveAssetSource(assets[0]).uri,
     name: "Cartier Ring",
     estimation: ["1800", "2300"],
-    receipt: assets[4],
+    receipt: Image.resolveAssetSource(assets[4]).uri,
     contractId: "T_LUKO_HI_1",
   },
   {
@@ -30,10 +30,10 @@ export const FAKE_DATA_INVENTORY: ValuableObject[] = [
     category: "Jewelry",
     purchaseDate: new Date("11/25/1989").toISOString(),
     purchaseValue: "2500",
-    mainImage: assets[1],
+    mainImage: Image.resolveAssetSource(assets[1]).uri,
     name: "Lou. Yetu Necklace",
     estimation: ["1800", "2300"],
-    receipt: assets[4],
+    receipt: Image.resolveAssetSource(assets[4]).uri,
     contractId: "T_LUKO_HI_1",
   },
   {
@@ -42,10 +42,10 @@ export const FAKE_DATA_INVENTORY: ValuableObject[] = [
     category: "Jewelry",
     purchaseDate: new Date("11/25/1989").toISOString(),
     purchaseValue: "2500",
-    mainImage: assets[2],
+    mainImage: Image.resolveAssetSource(assets[2]).uri,
     name: "Chanel Pearl Bracelet",
     estimation: ["1800", "2300"],
-    receipt: assets[4],
+    receipt: Image.resolveAssetSource(assets[4]).uri,
     contractId: "T_LUKO_HI_1",
   },
   {
@@ -54,10 +54,10 @@ export const FAKE_DATA_INVENTORY: ValuableObject[] = [
     category: "Jewelry",
     purchaseDate: new Date("11/25/1989").toISOString(),
     purchaseValue: "2500",
-    mainImage: assets[3],
+    mainImage: Image.resolveAssetSource(assets[3]).uri,
     name: "Rolex watch",
     estimation: ["1800", "2300"],
-    receipt: assets[4],
+    receipt: Image.resolveAssetSource(assets[4]).uri,
     contractId: "T_LUKO_HI_1",
   },
   {
@@ -66,10 +66,10 @@ export const FAKE_DATA_INVENTORY: ValuableObject[] = [
     category: "Jewelry",
     purchaseDate: new Date("11/25/1989").toISOString(),
     purchaseValue: "2500",
-    mainImage: assets[0],
+    mainImage: Image.resolveAssetSource(assets[0]).uri,
     name: "Cartier Ring #2",
     estimation: ["1800", "2300"],
-    receipt: assets[4],
+    receipt: Image.resolveAssetSource(assets[4]).uri,
     contractId: "T_LUKO_HI_1",
   },
   {
@@ -78,10 +78,10 @@ export const FAKE_DATA_INVENTORY: ValuableObject[] = [
     category: "Jewelry",
     purchaseDate: new Date("11/25/1989").toISOString(),
     purchaseValue: "2500",
-    mainImage: assets[1],
+    mainImage: Image.resolveAssetSource(assets[1]).uri,
     name: "Lou. Yetu Necklace #2",
     estimation: ["1800", "2300"],
-    receipt: assets[4],
+    receipt: Image.resolveAssetSource(assets[4]).uri,
     contractId: "T_LUKO_HI_1",
   },
   {
@@ -90,10 +90,10 @@ export const FAKE_DATA_INVENTORY: ValuableObject[] = [
     category: "Jewelry",
     purchaseDate: new Date("11/25/1989").toISOString(),
     purchaseValue: "2500",
-    mainImage: assets[2],
+    mainImage: Image.resolveAssetSource(assets[2]).uri,
     name: "Chanel Pearl Bracelet #2",
     estimation: ["1800", "2300"],
-    receipt: assets[4],
+    receipt: Image.resolveAssetSource(assets[4]).uri,
     contractId: "T_LUKO_HI_1",
   },
   {
@@ -102,10 +102,10 @@ export const FAKE_DATA_INVENTORY: ValuableObject[] = [
     category: "Jewelry",
     purchaseDate: new Date("11/25/1989").toISOString(),
     purchaseValue: "2500",
-    mainImage: assets[3],
+    mainImage: Image.resolveAssetSource(assets[3]).uri,
     name: "Rolex watch #2",
     estimation: ["1800", "2300"],
-    receipt: assets[4],
+    receipt: Image.resolveAssetSource(assets[4]).uri,
     contractId: "T_LUKO_HI_1",
   },
 ];

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, Image, ImageRequireSource } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import { makeStyles, Theme } from "../../theme";
@@ -8,7 +8,7 @@ import { Box, Text } from "../../components";
 interface CardProps {
   title: string;
   price: string;
-  source: ImageRequireSource;
+  source: string;
   onPress: () => void;
 }
 
@@ -31,7 +31,7 @@ const Card = ({ title, price, source, onPress }: CardProps) => {
             borderBottomWidth={StyleSheet.hairlineWidth}
           >
             <Image
-              source={source}
+              source={{ uri: source }}
               style={{
                 ...StyleSheet.absoluteFillObject,
                 width: undefined,

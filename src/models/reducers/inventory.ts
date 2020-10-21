@@ -17,16 +17,15 @@ export interface ValuableObject {
   category: "Art" | "Electronics" | "Jewelry" | "Music Instruments";
   purchaseDate: string;
   purchaseValue: string;
-  mainImage: number;
-  receipt: number;
-  image?: number;
+  mainImage: string;
+  receipt: string;
+  image?: string;
   contractId: string;
   endOfWarranty?: string;
   estimation?: [string, string];
   description?: string;
 }
 
-// First, create the thunk
 export const fetchInventorByUserId = createAsyncThunk(
   "user/fetchInventory",
   async () => {
@@ -45,14 +44,17 @@ const valuableObjectAdapter = createEntityAdapter<ValuableObject>({
 const inventorySlice = createSlice({
   name: "inventory",
   initialState: valuableObjectAdapter.getInitialState(),
-  reducers: {},
+  reducers: {
+    addValuableObject: valuableObjectAdapter.addOne,
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchInventorByUserId.fulfilled, (state, action) => {
       valuableObjectAdapter.addMany(state, action.payload);
-      // state.isLoading = false;
     });
   },
 });
+
+export const { addValuableObject } = inventorySlice.actions;
 
 export type FormatedValuableObject = {
   id: ValuableObject["id"];
@@ -65,7 +67,13 @@ export type FormatedValuableObject = {
   contractId: ValuableObject["contractId"];
   information: [string, string][];
   price: [string, string][];
-  documents: [{ id: 1; rank: 1; source: ValuableObject["receipt"] }];
+  documents: [
+    {
+      id: 1;
+      rank: 1;
+      source: ValuableObject["receipt"];
+    }
+  ];
 };
 
 const formateValuableObject = (valuableObject?: ValuableObject) => {
@@ -103,7 +111,13 @@ const formateValuableObject = (valuableObject?: ValuableObject) => {
       ],
       ["purchasePrice", "5780"],
     ],
-    documents: [{ id: 1, rank: 1, source: valuableObject.receipt }],
+    documents: [
+      {
+        id: 1,
+        rank: 1,
+        source: valuableObject.receipt,
+      },
+    ],
   };
 };
 

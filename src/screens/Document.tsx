@@ -1,17 +1,14 @@
 import * as React from "react";
-import { Image } from "react-native";
+import { Image, StyleSheet } from "react-native";
 
 import { Box, ModalContainer } from "../components";
 import { InventoryRoutes, StackNavigationProps } from "../navigation/types";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bill = require("../../assets/fake_bill.jpg");
-
-// const aspectRatio = 750 / 1000; // ?
-
 const Document = ({
   navigation: { goBack },
+  route,
 }: StackNavigationProps<InventoryRoutes, "Document">) => {
+  const { source } = route.params;
   return (
     <ModalContainer goBack={goBack}>
       <Box
@@ -22,11 +19,13 @@ const Document = ({
       >
         <Box width={375} height={375} backgroundColor="white">
           <Image
-            source={bill}
+            source={{ uri: source }}
             style={{
-              resizeMode: "center",
-              width: 375,
-              height: 375,
+              ...StyleSheet.absoluteFillObject,
+
+              resizeMode: "contain",
+              width: undefined,
+              height: undefined,
             }}
           />
         </Box>

@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  Image,
-  ImageSourcePropType,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Image, ScrollView } from "react-native";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import { Box, Text } from "../../components";
@@ -13,13 +8,13 @@ import { useReTheme } from "../../theme";
 type Document = {
   id: number;
   rank: number;
-  source: ImageSourcePropType;
+  source: string;
 };
 
 interface DocumentsProps {
   title: string;
   documents: Document[];
-  onPress: (id: number) => void;
+  onPress: (source: string) => void;
 }
 
 const Documents = ({ title, documents, onPress }: DocumentsProps) => {
@@ -32,7 +27,7 @@ const Documents = ({ title, documents, onPress }: DocumentsProps) => {
         contentContainerStyle={{ paddingTop: theme.spacing.sm }}
       >
         {documents.map(({ id, source }) => (
-          <BorderlessButton key={id} onPress={() => onPress(id)}>
+          <BorderlessButton key={id} onPress={() => onPress(source)}>
             <Box
               height={128}
               width={128}
@@ -42,7 +37,7 @@ const Documents = ({ title, documents, onPress }: DocumentsProps) => {
               overflow="hidden"
             >
               <Image
-                source={source}
+                source={{ uri: source }}
                 style={{
                   ...StyleSheet.absoluteFillObject,
                   width: undefined,
