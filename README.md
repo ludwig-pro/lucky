@@ -1,2 +1,2 @@
 # lucky
-luko technical test
+lucky technical test
